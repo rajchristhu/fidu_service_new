@@ -97,23 +97,52 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_currentIndex == 2) {
-            _pageController.animateToPage(
-              0,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.linear,
-            );
-          } else {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.linear,
-            );
-          }
-        },
-        child: const Icon(CupertinoIcons.chevron_right, color: Colors.white),
-        backgroundColor: Colors.transparent,
+      floatingActionButton: Stack(
+        children: <Widget>[
+          _currentIndex != 0?   Padding(padding: EdgeInsets.only(left: 32),child:  Align(
+            alignment: Alignment.bottomLeft,
+            child: FloatingActionButton(
+              onPressed: () {
+                if (_currentIndex == 2) {
+                  _pageController.animateToPage(
+                    0,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.linear,
+                  );
+                } else {
+                  _pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.linear,
+                  );
+                }
+              },
+              child: const Icon(CupertinoIcons.left_chevron, color: Colors.black),
+              backgroundColor: Colors.white,
+            ),
+          ),)
+         :Container(),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              onPressed: () {
+                if (_currentIndex == 2) {
+                  _pageController.animateToPage(
+                    0,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.linear,
+                  );
+                } else {
+                  _pageController.nextPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.linear,
+                  );
+                }
+              },
+              child:  Icon(_currentIndex == 2?CupertinoIcons.check_mark:CupertinoIcons.chevron_right, color: Colors.black,),
+              backgroundColor: Colors.white,
+            ),
+          ),
+        ],
       ),
     );
   }
