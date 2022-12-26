@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fidu_service/widget/text_widget.dart';
 import 'package:lottie/lottie.dart';
+import 'package:get/get.dart';
 
 import '../../resources/colors.dart';
+import '../dashboard/dashboard.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -109,6 +111,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.linear,
                   );
+                  // Get.to(OnboardingScreen());
+
                 } else {
                   _pageController.previousPage(
                     duration: const Duration(milliseconds: 300),
@@ -126,11 +130,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: FloatingActionButton(
               onPressed: () {
                 if (_currentIndex == 2) {
-                  _pageController.animateToPage(
-                    0,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.linear,
-                  );
+                  Get.to(BottomNavBar());
+
                 } else {
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
@@ -160,7 +161,7 @@ class ArcPainter extends CustomPainter {
       ..lineTo(size.width, 0)
       ..close();
 
-    canvas.drawPath(orangeArc, Paint()..color = Colors.orange);
+    canvas.drawPath(orangeArc, Paint()..color = grayColor1);
 
     Path whiteArc = Path()
       ..moveTo(0.0, 0.0)

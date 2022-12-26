@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         backgroundColor: backgroundColor,
         primarySwatch: Colors.amber,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: GoogleFonts.poppinsTextTheme(
+        textTheme: GoogleFonts.varelaRoundTextTheme(
           Theme.of(context).textTheme,
         ),
       ),

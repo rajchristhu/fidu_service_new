@@ -12,7 +12,7 @@ TextStyle editTextStyle(
     double letterSpacing = 0.2,
     FontStyle? fontStyle,
     Color? color}) {
-  return GoogleFonts.poppins(textStyle:TextStyle(
+  return GoogleFonts.varelaRound(textStyle:TextStyle(
       fontWeight: fontWeight,
       fontStyle: fontStyle,
       fontSize: fontSize,
@@ -29,7 +29,7 @@ TextStyle hintTextStyle(
     double letterSpacing = 0,
     FontStyle? fontStyle,
     Color? color}) {
-  return GoogleFonts.poppins(textStyle: TextStyle(
+  return GoogleFonts.varelaRound(textStyle: TextStyle(
       fontWeight: fontWeight,
       fontStyle: fontStyle,
       fontSize: fontSize,
@@ -83,7 +83,7 @@ TextStyle textStyle(
     // String fontFamily = Strings.avenirNext,
     bool underline = false,
     Color? color}) {
-  return GoogleFonts.poppins(textStyle:  TextStyle(
+  return GoogleFonts.varelaRound(textStyle:  TextStyle(
       fontWeight: fontWeight,
       fontStyle: fontStyle,
       fontSize: fontSize,

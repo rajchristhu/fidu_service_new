@@ -19,7 +19,7 @@ class SplashPage extends FiduServiceFullWidget {
 }
 
 class _SplashPageState extends FiduService<SplashPage> {
-  SizeHelper _sizeHelper = SizeHelper.getInstance();
+  final SizeHelper _sizeHelper = SizeHelper.getInstance();
 
   @override
   void initState() {

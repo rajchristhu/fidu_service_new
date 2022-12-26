@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -39,6 +40,7 @@ abstract class FiduService<T extends FiduServiceFullWidget> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
+    backgroundColor=whiteColor;
     return buildBody();
   }
 
