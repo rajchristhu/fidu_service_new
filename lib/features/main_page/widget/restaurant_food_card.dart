@@ -109,61 +109,91 @@ class _FoodInRestaurantState extends State<FoodInRestaurant> {
                           ),
                         ),
                         SizedBox(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: 25,
-                                height: 20,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    counter--;
-                                    setState(() {});
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3),
-                                      ),
-                                      backgroundColor: primaryColorDarkOne,
-                                      padding: EdgeInsets.all(0)),
-                                  child: Icon(
-                                    Icons.remove,
-                                    color: whiteColor,
-                                    size: 18,
+                          child: counter == 0
+                              ? SizedBox(
+                                  width: 75,
+                                  height: 25,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      counter++;
+                                      setState(() {});
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(7),
+                                        ),
+                                        backgroundColor: whiteColor,
+                                        padding: EdgeInsets.all(0)),
+                                    child: Text("Add",
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            color: primaryColorDark,
+                                            fontWeight: FontWeight.w600)),
                                   ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text("${counter}",
-                                  style: TextStyle(
-                                    color: textColor,
-                                    fontSize: 20,
-                                  )),
-                              const SizedBox(width: 10),
-                              SizedBox(
-                                width: 25,
-                                height: 20,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    counter++;
-                                    setState(() {});
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(3),
+                                )
+                              : Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: 25,
+                                      height: 25,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          counter--;
+                                          setState(() {});
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                            ),
+                                            backgroundColor:
+                                                primaryColorDarkOne,
+                                            padding: EdgeInsets.all(0)),
+                                        child: Icon(
+                                          Icons.remove,
+                                          color: whiteColor,
+                                          size: 18,
+                                        ),
                                       ),
-                                      backgroundColor: primaryColorDarkOne,
-                                      padding: EdgeInsets.all(0)),
-                                  child: Icon(
-                                    Icons.add,
-                                    color: whiteColor,
-                                    size: 18,
-                                  ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Text(
+                                      "$counter",
+                                      style: TextStyle(
+                                        color: textColorSmall,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    SizedBox(
+                                      width: 25,
+                                      height: 25,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          counter++;
+                                          setState(() {});
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                            ),
+                                            backgroundColor:
+                                                primaryColorDarkOne,
+                                            padding: EdgeInsets.all(0)),
+                                        child: Icon(
+                                          Icons.add,
+                                          color: whiteColor,
+                                          size: 18,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
                         )
                       ],
                     ),

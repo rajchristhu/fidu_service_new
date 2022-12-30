@@ -34,3 +34,7 @@ Color whiteColor = HexColor("#FFFAFA");
 Color whiteColors = HexColor("#F2F6FC");
 Color rose = HexColor("#fae1db");
 Color counterButtonColor = HexColor("#ba8143");
+Color chipBackgroundColor = HexColor("#ebebeb");
+Color chipIcon = HexColor("#699153");
+Color chipColor = HexColor("#f5f5f5");
+Color chipSelectedColor = HexColor("#fcf0e8");

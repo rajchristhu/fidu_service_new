@@ -10,8 +10,6 @@ class BottomEditLayout extends StatefulWidget {
   State<BottomEditLayout> createState() => _BottomEditLayout();
 }
 
-late DateTime? selectedTime;
-
 class _BottomEditLayout extends State<BottomEditLayout> {
   late TextEditingController textController = TextEditingController();
 
