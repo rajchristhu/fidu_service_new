@@ -99,6 +99,8 @@ flutter:
     - assets/lottie/delivery.json
     - assets/lottie/mobile.json
     - assets/lottie/order.json
+    - assets/pages/veg.png
+    - assets/pages/non-veg.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
