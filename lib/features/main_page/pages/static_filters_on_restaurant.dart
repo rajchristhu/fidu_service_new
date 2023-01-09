@@ -21,6 +21,12 @@ class _StaticRestaurantFiltersState extends State<StaticRestaurantFilters> {
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle customFilterStyle = TextStyle(
+      fontSize: 16,
+      color: textColor,
+      fontWeight: FontWeight.w600,
+    );
+
     return Container(
       height: 35,
       child: SizedBox(
@@ -54,11 +60,7 @@ class _StaticRestaurantFiltersState extends State<StaticRestaurantFilters> {
                     const SizedBox(width: 8),
                     Text(
                       "Veg",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: textColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: customFilterStyle,
                     ),
                   ],
                 ),
@@ -90,11 +92,7 @@ class _StaticRestaurantFiltersState extends State<StaticRestaurantFilters> {
                     const SizedBox(width: 8),
                     Text(
                       "Non-veg",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: textColor,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: customFilterStyle,
                     ),
                   ],
                 ),
