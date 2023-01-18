@@ -74,7 +74,7 @@ class _SplashPageState extends FiduService<SplashPage> {
     );
   }
 
-  Container _buildDivider() {
+  Widget _buildDivider() {
     return Container(
       margin: EdgeInsets.only(top: _sizeHelper.dividerLineTopMargin(context)),
       width: _sizeHelper.dividerWidth(context),

@@ -163,7 +163,6 @@ class _RestaurantTitleCardState extends State<RestaurantTitleCard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
                   Container(
                     height: 1.6,
                     width: MediaQuery.of(context).size.width - 80,

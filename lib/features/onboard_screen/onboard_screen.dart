@@ -20,6 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
+
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
