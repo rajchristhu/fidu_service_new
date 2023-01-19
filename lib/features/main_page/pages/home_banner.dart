@@ -16,10 +16,13 @@ class HomeBannerLanding extends StatefulWidget {
 bool check = false;
 
 class _HomeBannerLandingState extends State<HomeBannerLanding> {
+  bool checks =false;
+
   @override
   void initState() {
     super.initState();
     check = true;
+    checks = false;
   }
 
   List<String> carousalList = [
@@ -28,15 +31,16 @@ class _HomeBannerLandingState extends State<HomeBannerLanding> {
     "https://picsum.photos/200"
   ];
   int _current = 0;
-
   @override
   Widget build(BuildContext context) {
     final CarouselController _controller = CarouselController();
 
 
     return FutureBuilder(
-      future: FirebaseCrud.readEmployee(),
+      future: checks?null:FirebaseCrud.readEmployee(),
       builder: (context, dataSnapshot) {
+
+        checks=true;
         if (dataSnapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(),
