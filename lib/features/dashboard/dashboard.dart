@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:fidu_service/core/FirebaseCURD.dart';
+import 'package:fidu_service/features/main_page/map/map.dart';
 import 'package:fidu_service/resources/colors.dart';
 import 'package:fidu_service/resources/strings.dart';
 import 'package:fidu_service/util/connectivity_service.dart';
@@ -10,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../widget/background.dart';
 import '../../widget/separate.dart';
@@ -415,55 +418,61 @@ class _BottomNavBarState extends State<BottomNavBar> {
               const SizedBox(
                 width: 0,
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+              InkWell(
+                onTap: (){
+                  // Get.to(HomeScreen());HomeScreenΩ
+                },
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
-                      Text(
-                        "Deliver to",
+                        Text(
+                          "Deliver to",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: grayColor1,
+                              fontSize: 12.0,
+                              fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    _currentPosition != null &&
+                        _currentAddress != null?
+                    Container(
+                        width: MediaQuery.of(context).size.width-200,
+                        child:  Text(_currentAddress!,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: blackColor,
+                              fontSize: 14.0,
+                              overflow: TextOverflow.ellipsis,
+
+                              fontWeight: FontWeight.w600),
+                        )):Container(
+                      width: MediaQuery.of(context).size.width-200,
+                      child: Text("--",
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            color: grayColor1,
-                            fontSize: 12.0,
+                            color: blackColor,
+                            fontSize: 14.0,
+                            overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.w600),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  _currentPosition != null &&
-                      _currentAddress != null?
-                  Container(
-                      width: MediaQuery.of(context).size.width-200,
-                      child:  Text(_currentAddress!,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: blackColor,
-                        fontSize: 14.0,
-                        overflow: TextOverflow.ellipsis,
+                      ),
+                    )
+                    ,
 
-                        fontWeight: FontWeight.w600),
-                  )):Container(
-                    width: MediaQuery.of(context).size.width-200,
-                    child: Text("--",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: blackColor,
-                          fontSize: 14.0,
-                          overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  )
-                  ,
-
-                ],
+                  ],
+                ),
               )
+
             ],
           )
 
@@ -511,4 +520,5 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ? Container()
             : Container());
   }
+
 }

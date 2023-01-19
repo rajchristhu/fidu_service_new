@@ -28,6 +28,7 @@ class _ShopInfoState extends State<ShopInfo> {
       resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton.small(
           onPressed: () {},
+          heroTag: null,
           backgroundColor: primaryColorDarkOne,
           child: Icon(
             Icons.restaurant_menu_rounded,

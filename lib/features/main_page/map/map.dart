@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
     currentLocation = _getCurrentLocation();
     selectedLocationStatic = Place(name: "",
       geometry: Geometry(location: Location(
-          lat: currentLocation!.latitude, lng: currentLocation!.longitude),), vicinity: '',);
+          lat:73.2, lng: 74.3),), vicinity: '',);
     // notifyListeners();
   }
 
@@ -144,11 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: (currentLocation == null)
-            ? Center(
-          child: CircularProgressIndicator(),
-        )
-            : ListView(
+        body: ListView(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -172,8 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     myLocationEnabled: true,
                     initialCameraPosition: CameraPosition(
                       target: LatLng(
-                          currentLocation!.latitude,
-                          currentLocation!.longitude),
+                          70.2,
+                          73.2),
                       zoom: 14,
                     ),
                     onMapCreated: (GoogleMapController controller) {

@@ -105,6 +105,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           _currentIndex != 0?   Padding(padding: EdgeInsets.only(left: 32),child:  Align(
             alignment: Alignment.bottomLeft,
             child: FloatingActionButton(
+              heroTag: null,
+
               onPressed: () {
                 if (_currentIndex == 2) {
                   _pageController.animateToPage(
@@ -129,6 +131,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           Align(
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
+              heroTag: null,
+
               onPressed: () {
                 if (_currentIndex == 2) {
                   Get.to(BottomNavBar());

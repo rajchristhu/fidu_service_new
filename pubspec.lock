@@ -408,6 +408,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  geocoding:
+    dependency: "direct dev"
+    description:
+      name: geocoding
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
+  geocoding_platform_interface:
+    dependency: transitive
+    description:
+      name: geocoding_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   geolocator:
     dependency: "direct dev"
     description:
@@ -430,7 +444,7 @@ packages:
     source: hosted
     version: "2.0.4"
   google_api_headers:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: google_api_headers
       url: "https://pub.dartlang.org"
@@ -738,7 +752,7 @@ packages:
     source: hosted
     version: "6.0.4"
   rxdart:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: rxdart
       url: "https://pub.dartlang.org"
