@@ -172,8 +172,8 @@ class GeoHashQuery {
     throw FormatException("Can't join these two queries: $this, $other");
   }
 
-  Query<Map<String, dynamic>> createFirestoreQuery(GeoFirestore geoFirestore) {
-    return geoFirestore.collectionReference;
+  Query<Map<String, dynamic>> createFirestoreQuery(GeoFirestore geoFirestore, bool check) {
+    return check?geoFirestore.collectionReference.orderBy("count", descending: false):geoFirestore.collectionReference;
   }
 
   bool containsGeoHash(String hash) {

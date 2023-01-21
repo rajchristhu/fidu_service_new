@@ -4,12 +4,13 @@ import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ShopWidget extends StatelessWidget {
   const ShopWidget({Key? key, required this.carousalList, required this.index})
       : super(key: key);
 
-  final List<String> carousalList;
+  final List<DocumentSnapshot<Object?>> carousalList;
   final int index;
   // final
 
@@ -40,7 +41,7 @@ class ShopWidget extends StatelessWidget {
                       fit: BoxFit.cover,
                       width: 110,
                       height: 110,
-                      imageUrl: carousalList[index],
+                      imageUrl: carousalList[index]["kadaiImage"],
                       placeholder: (context, url) => Container(
                         width: MediaQuery.of(context).size.width,
                         color: HexColor("#8AE2E2E2"),
@@ -61,7 +62,7 @@ class ShopWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Biriyani",
+                      carousalList[index]["name"],
                       style: TextStyle(
                           color: blackColor,
                           fontSize: 17,
@@ -71,7 +72,7 @@ class ShopWidget extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      "Pizza",
+                (carousalList[index]["maindish"]).toString().trim()!=""?carousalList[index]["maindish"]:"-",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -83,7 +84,7 @@ class ShopWidget extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      "Nunkambakkam",
+                      (carousalList[index]["address"]).toString().trim()!=""?carousalList[index]["address"]:"-",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -151,10 +152,15 @@ class ShopWidget extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        Icon(Icons.local_fire_department,
-                            size: 17, color: primaryColorDarkOne),
+                        Image.asset(
+                          carousalList[index]["type"]=="veg"?'assets/pages/veg.png':"assets/pages/non-veg.png",
+                          height: 14,
+                          width: 14,
+                        ),
+                        // Icon(Icons.local_fire_department,
+                        //     size: 17, color: primaryColorDarkOne),
                         SizedBox(
-                          width: 6,
+                          width: 12,
                         ),
                         Text(
                           "50% offer upto two",

@@ -37,7 +37,7 @@ class _HomeBannerLandingState extends State<HomeBannerLanding> {
 
 
     return FutureBuilder(
-      future: checks?null:FirebaseCrud.readEmployee(),
+      future: checks?null:FirebaseCrud.readHomebanner(),
       builder: (context, dataSnapshot) {
 
         checks=true;

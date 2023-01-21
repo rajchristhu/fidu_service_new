@@ -21,8 +21,7 @@ class GeoFirestore {
   static GeoPoint? getLocationValue(DocumentSnapshot documentSnapshot) {
     try {
       final data = documentSnapshot.data() as Map<String, dynamic>;
-      print("object");
-      print(data);
+
       if (data != null && data['geoLocation'] != null) {
         GeoPoint location = data['geoLocation'];
         final latitude = location.latitude;
@@ -83,27 +82,25 @@ class GeoFirestore {
   ///
   Future<List<DocumentSnapshot<Map<String, dynamic>>>> getAtLocation(
     GeoPoint center,
-    double radius, {
+    double radius, bool check, {
     bool exact = true,
     bool addDistance = true,
   }) async {
     // Get the futures from Firebase Queries generated from GeoHashQueries
     final futures = GeoHashQuery.queriesAtLocation(
             center, GeoUtils.capRadius(radius) * 1000)
-        .map((query) => query.createFirestoreQuery(this).get());
+        .map((query) => query.createFirestoreQuery(this,check).get());
     // Await the completion of all the futures
     try {
       List<DocumentSnapshot<Map<String, dynamic>>> documents = [];
       final snapshots = await Future.wait(futures);
       snapshots.forEach((snapshot) {
-        print(snapshot.docs.length);
         documents.clear();
         snapshot.docs.forEach((doc) {
           GeoPoint latLng = doc.data()['geoLocation'];
 if(latLng!=null) {
   if (addDistance || exact) {
-    print(latLng.latitude);
-    print(latLng.longitude);
+
     final distance = GeoUtils.distance(center, latLng);
     if (exact) {
       if (distance <= radius) {

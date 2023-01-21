@@ -7,6 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:get/get.dart';
 
 import '../../resources/colors.dart';
+import '../Login/login_page.dart';
 import '../dashboard/dashboard.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -135,7 +136,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               onPressed: () {
                 if (_currentIndex == 2) {
-                  Get.to(BottomNavBar());
+                  Get.to(ContinueWithPhone());
 
                 } else {
                   _pageController.nextPage(
