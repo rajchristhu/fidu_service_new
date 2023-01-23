@@ -12,7 +12,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fidu_service/features/dashboard/dashboard.dart';
 
 import '../../widget/background.dart';
 import '../../widget/separate.dart';

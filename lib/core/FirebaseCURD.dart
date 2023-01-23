@@ -21,8 +21,8 @@ class FirebaseCrud {
     documents= documents.toSet().toList();
 
     documents.forEach((document) {
-print("sdjfsjdfjs");
-print(document["count"]);
+// print("sdjfsjdfjs");
+// print(document["count"]);
     });
 
     return documents;

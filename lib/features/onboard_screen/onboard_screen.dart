@@ -136,7 +136,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
               onPressed: () {
                 if (_currentIndex == 2) {
-                  Get.to(ContinueWithPhone());
+                  Get.offAll(ContinueWithPhone());
 
                 } else {
                   _pageController.nextPage(

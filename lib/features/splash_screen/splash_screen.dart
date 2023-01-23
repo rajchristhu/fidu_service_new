@@ -33,7 +33,7 @@ class _SplashPageState extends FiduService<SplashPage> {
   void _navigate() {
     Future.delayed(Duration(seconds: 5), () {
       if (mounted) {
-        Get.to(OnboardingScreen());
+        Get.offAll(OnboardingScreen());
         // Navigator.pushReplacementNamed(context, RoutePaths.Login);
       }
     });

@@ -16,7 +16,7 @@ class NumericPad extends StatelessWidget {
         children: <Widget>[
 
           Container(
-            height: MediaQuery.of(context).size.height * 0.11,
+            height: MediaQuery.of(context).size.height * 0.09,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +29,7 @@ class NumericPad extends StatelessWidget {
           ),
 
           Container(
-            height: MediaQuery.of(context).size.height * 0.11,
+            height: MediaQuery.of(context).size.height * 0.09,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +42,7 @@ class NumericPad extends StatelessWidget {
           ),
 
           Container(
-            height: MediaQuery.of(context).size.height * 0.11,
+            height: MediaQuery.of(context).size.height * 0.09,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +55,7 @@ class NumericPad extends StatelessWidget {
           ),
 
           Container(
-            height: MediaQuery.of(context).size.height * 0.11,
+            height: MediaQuery.of(context).size.height * 0.09,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class NumericPad extends StatelessWidget {
               child: Text(
                 number.toString(),
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFF1F1F1F),
                 ),

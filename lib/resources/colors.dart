@@ -15,6 +15,7 @@ Color primaryColors = HexColor("#FB6E3B");
 Color primaryColorss = HexColor("#FB6E3B");
 Color original = HexColor("#FF512F");
 Color or = HexColor("#03041D");
+Color orwhite = HexColor("#F8F8F8");
 // Color accentColor = HexColor("#f85032");
 Color textColor = HexColor("#686B78");
 Color textColorCardTitle = HexColor("#47484d");

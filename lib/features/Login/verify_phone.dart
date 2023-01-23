@@ -1,6 +1,9 @@
+import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/material.dart';
 
+import '../dashboard/dashboard.dart';
 import 'numeric_pad.dart';
+import 'package:get/get.dart';
 
 class VerifyPhone extends StatefulWidget {
 
@@ -58,9 +61,9 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 14),
                         child: Text(
-                          "Code is sent to " + widget.phoneNumber,
+                          "We have sent an OTP to +91- " + widget.phoneNumber,
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 16,
                             color: Color(0xFF818181),
                           ),
                         ),
@@ -76,6 +79,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                             buildCodeNumberBox(code.length > 1 ? code.substring(1, 2) : ""),
                             buildCodeNumberBox(code.length > 2 ? code.substring(2, 3) : ""),
                             buildCodeNumberBox(code.length > 3 ? code.substring(3, 4) : ""),
+                            buildCodeNumberBox(code.length > 4 ? code.substring(4, 5) : ""),
 
                           ],
                         ),
@@ -120,11 +124,11 @@ class _VerifyPhoneState extends State<VerifyPhone> {
               ),
 
               Container(
-                height: MediaQuery.of(context).size.height * 0.13,
+                height: MediaQuery.of(context).size.height * 0.11,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
-                    Radius.circular(25),
+                    Radius.circular(60),
                   ),
                 ),
                 child: Padding(
@@ -135,20 +139,21 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
-                            print("Verify and Create Account");
+                            Get.offAll(BottomNavBar());
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Color(0xFFFFDC3D),
+                              color: accentColor,
                               borderRadius: BorderRadius.all(
-                                Radius.circular(15),
+                                Radius.circular(60),
                               ),
                             ),
                             child: Center(
                               child: Text(
-                                "Verify and Create Account",
+                                "Submit",
                                 style: TextStyle(
                                   fontSize: 18,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -167,7 +172,7 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                   print(value);
                   setState(() {
                     if(value != -1){
-                      if(code.length < 4){
+                      if(code.length < 5){
                         code = code + value.toString();
                       }
                     }
@@ -199,10 +204,10 @@ class _VerifyPhoneState extends State<VerifyPhone> {
             ),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 25.0,
+                  color: grayColor1,
+                  blurRadius: 20.0,
                   spreadRadius: 1,
-                  offset: Offset(0.0, 0.75)
+                  offset: Offset(8.0, 4.2)
               )
             ],
           ),
