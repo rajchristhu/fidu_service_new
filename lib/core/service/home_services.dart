@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../geo2/src/geo_firestore_flutter.dart';
 import '../../model/product_detail_model.dart';
 
 import '../../model/banner_model.dart';
@@ -9,10 +10,15 @@ import '../../model/treanding_model.dart';
 class HomeService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   Future<List<BannerModel>> getBanner() async {
+    final queryLocation = GeoPoint(10.53825, 79.634827);
+    GeoFirestore geoFirestore = GeoFirestore(_db.collection('deal'));
+
     QuerySnapshot<Map<String, dynamic>> snapshot =
         await _db.collection("deal").get();
-    return snapshot.docs
-        .map((docSnapshot) => BannerModel.fromJson(docSnapshot.data()))
+    List<DocumentSnapshot<Map<String, dynamic>>> documents = await geoFirestore.getAtLocation(queryLocation, 5,false);
+
+    return documents
+        .map((docSnapshot) => BannerModel.fromJson(docSnapshot.data()!))
         .toList();
   }
 
@@ -33,10 +39,13 @@ class HomeService {
   }
 
   Future<List<ShopModel>> getShop() async {
+    final queryLocation = GeoPoint(10.53825, 79.634827);
+    GeoFirestore getKadai = GeoFirestore(_db.collection('kadai'));
+    List<DocumentSnapshot<Map<String, dynamic>>>  documents = await getKadai.getAtLocation(queryLocation, 5,true);
     QuerySnapshot<Map<String, dynamic>> snapshot =
     await _db.collection("kadai").get();
-    return snapshot.docs
-        .map((docSnapshot) => ShopModel.fromJson(docSnapshot.data()))
+    return documents
+        .map((docSnapshot) => ShopModel.fromJson(docSnapshot.data()!))
         .toList();
   }  
   

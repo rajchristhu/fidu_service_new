@@ -1,4 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:fidu_service/features/splash_screen/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,7 +28,7 @@ class ControlView extends GetWidget<AuthViewModel> {
         endDrawer: endDrawer(context),
         appBar: appBar(_scaffoldKey),
         body: controller.currentScreen,
-        bottomNavigationBar: bottomNavigationBar(_bottomNavigationKey),
+        bottomNavigationBar: SplashPage(),
       ),
     );
   }

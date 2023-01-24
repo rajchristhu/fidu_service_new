@@ -1,17 +1,20 @@
 import 'package:fidu_service/resources/colors.dart';
 import 'package:fidu_service/resources/strings.dart';
 import 'package:fidu_service/util/connectivity_service.dart';
+import 'package:fidu_service/view/control_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'features/splash_screen/splash_screen.dart';
+import 'helper/binding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  ConnectionStatusSingleton connectionStatus = ConnectionStatusSingleton.getInstance();
+  ConnectionStatusSingleton connectionStatus =
+      ConnectionStatusSingleton.getInstance();
   connectionStatus.initialize();
   runApp(const MyApp());
 }
@@ -35,8 +38,13 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme,
         ),
       ),
-
-      home:SplashPage(),
+      initialBinding: Binding(),
+      home: Scaffold(
+        body: ControlView(),
+      ),
+      // theme: ThemeData(
+      //   fontFamily: 'SourceSans',
+      // ),
     ));
   }
 }

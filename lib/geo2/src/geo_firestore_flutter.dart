@@ -82,14 +82,15 @@ class GeoFirestore {
   ///
   Future<List<DocumentSnapshot<Map<String, dynamic>>>> getAtLocation(
     GeoPoint center,
-    double radius, bool check, {
+    double radius,
+    bool check, {
     bool exact = true,
     bool addDistance = true,
   }) async {
     // Get the futures from Firebase Queries generated from GeoHashQueries
     final futures = GeoHashQuery.queriesAtLocation(
             center, GeoUtils.capRadius(radius) * 1000)
-        .map((query) => query.createFirestoreQuery(this,check).get());
+        .map((query) => query.createFirestoreQuery(this, check).get());
     // Await the completion of all the futures
     try {
       List<DocumentSnapshot<Map<String, dynamic>>> documents = [];
@@ -97,24 +98,27 @@ class GeoFirestore {
       snapshots.forEach((snapshot) {
         documents.clear();
         snapshot.docs.forEach((doc) {
-          GeoPoint latLng = doc.data()['geoLocation'];
-if(latLng!=null) {
-  if (addDistance || exact) {
-
-    final distance = GeoUtils.distance(center, latLng);
-    if (exact) {
-      if (distance <= radius) {
-        doc.data()['distance'] = distance;
-        documents.add(doc);
-      }
-    } else {
-      doc.data()['distance'] = distance;
-      documents.add(doc);
-    }
-  } else {
-    documents.add(doc);
-  }
-}
+          try {
+            GeoPoint? latLng = doc.data()['geoLocation']!;
+            if (latLng != null) {
+                        if (addDistance || exact) {
+                          final distance = GeoUtils.distance(center, latLng);
+                          if (exact) {
+                            if (distance <= radius) {
+                              doc.data()['distance'] = distance;
+                              documents.add(doc);
+                            }
+                          } else {
+                            doc.data()['distance'] = distance;
+                            documents.add(doc);
+                          }
+                        } else {
+                          documents.add(doc);
+                        }
+                      }
+          } catch (e) {
+            print(e);
+          }
         });
       });
 
