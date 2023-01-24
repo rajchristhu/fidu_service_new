@@ -10,7 +10,7 @@ class HomeService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   Future<List<BannerModel>> getBanner() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
-        await _db.collection("Banners").get();
+        await _db.collection("deal").get();
     return snapshot.docs
         .map((docSnapshot) => BannerModel.fromJson(docSnapshot.data()))
         .toList();
@@ -34,7 +34,7 @@ class HomeService {
 
   Future<List<ShopModel>> getShop() async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
-    await _db.collection("Shop").get();
+    await _db.collection("kadai").get();
     return snapshot.docs
         .map((docSnapshot) => ShopModel.fromJson(docSnapshot.data()))
         .toList();
@@ -51,8 +51,8 @@ class HomeService {
   }
   Future<List<ProductDetailModel>> getProductDetail(id) async {
     QuerySnapshot<Map<String, dynamic>> snapshot =
-    await _db.collection("ProductDetail")
-        .where('id', isEqualTo: id.toString())
+    await _db.collection("kadaiItem").doc(id).collection("food")
+        // .where('id', isEqualTo: id.toString())
         .get();
     return snapshot.docs
         .map((docSnapshot) => ProductDetailModel.fromJson(docSnapshot.data()))

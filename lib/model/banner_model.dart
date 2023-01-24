@@ -11,16 +11,16 @@ class BannerModel {
     }
     id = map['id'];
     image = map['image'];
-    new_shop = map['new_shop'];
-    offer = map['offer'];
+    new_shop = map['status'];
+    offer = map['name'];
   }
 
   toJson() {
     return {
       'id': id,
       'image': image,
-      'new_shop': new_shop,
-      'offer': offer,
+      'name': new_shop,
+      'status': offer,
     };
   }
 }

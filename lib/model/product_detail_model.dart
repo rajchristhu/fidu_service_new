@@ -12,20 +12,20 @@ class ProductDetailModel {
       return;
     }
 
-    name = map['name'];
+    name = map['foodname'];
     image = map['image'];
-    description = map['description'];
-    qty = map['qty'];
-    rate = map['rate'];
-    offer = map['offer'];
+    description = map['menu'];
+    qty = map['quantity'];
+    rate = map['originalprice'];
+    offer = map['menu'];
     price = map['price'];
     id = map['id'];
-    productId = map['productId'];
+    productId = map['itemId'];
   }
 
   toJson() {
     return {
-      'name': name,
+      'foodname': name,
       'image': image,
       'description': description,
       'qty': qty,

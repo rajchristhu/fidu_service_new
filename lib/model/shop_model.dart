@@ -13,25 +13,25 @@ class ShopModel {
     }
 
     name = map['name'];
-    image = map['image'];
-    description = map['description'];
-    place = map['place'];
-    rate = map['rate'];
-    offer = map['offer'];
-    price = map['price'];
+    image = map['kadaiImage'];
+    description = map['address'];
+    place = map['oru'];
+    rate = map['count'];
+    offer = map['maindish'];
+    price = map['phoneno'];
     id = map['id'];
-    productId = map['productId'];
+    productId = map['type'];
   }
 
   toJson() {
     return {
       'name': name,
-      'image': image,
-      'description': description,
-      'place': place,
-      'rate': rate,
-      'offer': offer,
-      'price': price,
+      'kadaiImage': image,
+      'address': description,
+      'oru': place,
+      'count': rate,
+      'maindish': offer,
+      'phoneno': price,
       'id': id,
       'productId': productId,
     };
