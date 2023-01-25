@@ -1,6 +1,6 @@
 import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'numeric_pad.dart';
 import 'verify_phone.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,7 +14,54 @@ class ContinueWithPhone extends StatefulWidget {
 
 class _ContinueWithPhoneState extends State<ContinueWithPhone> {
   String phoneNumber = "";
-bool check=false;
+  bool check = false;
+  FirebaseAuth auth = FirebaseAuth.instance;
+
+  login() async {
+    print("sdfdfndf");
+    await auth.verifyPhoneNumber(
+      phoneNumber: '+919597138105',
+      timeout: Duration(seconds: 60),
+      verificationCompleted: (PhoneAuthCredential credential) {
+        print("adfjadsf");
+      },
+      verificationFailed: (FirebaseAuthException e) {
+        if (e.code == 'invalid-phone-number') {
+          print('The provided phone number is not valid.');
+        }
+      },
+      codeSent: (String verificationId, int? resendToken) async {
+        showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return InkWell(
+                onTap: () async {
+                  String smsCode = '123456';
+
+                  // Create a PhoneAuthCredential with the code
+                  PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
+
+                  // Sign the user in (or link) with the credential
+                  await auth.signInWithCredential(credential).then((value) =>
+                  {
+                    print("value.user!.displayName!"),
+                    print(value.user!.displayName!),
+                    print(value.user!.phoneNumber!),
+
+                  });
+
+                },
+                child: Text("fdsfsfdsdfsfsfsfsf"),
+              )
+                ;
+            }
+        );
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    ).then((value) => {print("adfdf")});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,13 +73,13 @@ bool check=false;
         ),
         title: Text(
           "Fidu Service",
-          style:GoogleFonts.pacifico(
-        textStyle:  TextStyle(
-            fontSize: 32,
-            fontWeight: FontWeight.bold,
-            color: blackColor,
+          style: GoogleFonts.pacifico(
+            textStyle: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+              color: blackColor,
+            ),
           ),
-        ),
         ),
         backgroundColor: Colors.white,
         elevation: 0,
@@ -40,161 +87,155 @@ bool check=false;
         textTheme: Theme.of(context).textTheme,
       ),
       body: SafeArea(
-
           child: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Colors.white,
-                    orwhite,
-                    orwhite,
-                    orwhite,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.white,
+            orwhite,
+            orwhite,
+            orwhite,
+          ],
+        )),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFFFFFFFF),
+                      Color(0xFFF7F7F7),
+                    ],
+                  ),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Lottie.asset(
+                      "assets/lottie/sms.json",
+                      key: Key('${Random().nextInt(999999999)}'),
+                      height: 200,
+                      alignment: Alignment.topCenter,
+                    )
                   ],
-                )
+                ),
+              ),
             ),
-            child:  Column(
-
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFFFFFFFF),
-                          Color(0xFFF7F7F7),
+            Container(
+              decoration: BoxDecoration(
+                // color: Colors.white,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(0),
+                ),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(15),
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      width: 230,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Enter your phone number",
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: grayColor1,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 12,
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                "+91 ",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: grayColor1,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                phoneNumber,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: blackColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Lottie.asset(
-                        "assets/lottie/sms.json",
-                          key: Key('${Random().nextInt(999999999)}'),
-                          height: 200,
-                          alignment: Alignment.topCenter,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    // color: Colors.white,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(0),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          width: 230,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                "Enter your phone number",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: grayColor1,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "+91 ",
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: grayColor1,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-
-                                  Text(
-                                    phoneNumber,
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      color: blackColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-
-                                ],
-                              )
-                            ],
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          // login();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    VerifyPhone(phoneNumber: phoneNumber)),
+                          );
+                        },
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: accentColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(60),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        VerifyPhone(phoneNumber: phoneNumber)),
-                              );
-                            },
-                            child: Container(
-                              height: 50,
-                              decoration:  BoxDecoration(
-                                color: accentColor,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(60),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Send OTP",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          child: Center(
+                            child: Text(
+                              "Send OTP",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-                NumericPad(
-                  onNumberSelected: (value) {
-                    setState(() {
-                      check=true;
-                      // if(phoneNumber.length<10) {
-                      if (value != -1) {
-                        if (phoneNumber.length < 10) {
-                          phoneNumber = phoneNumber + value.toString();
-                        }
-                        print("asd");
-                      } else {
-                        if (phoneNumber != "") {
-                          phoneNumber =
-                              phoneNumber.substring(0, phoneNumber.length - 1);
-                        }
-                        print("Asd");
-                      }
-                      // }
-                    });
-                  },
-                ),
-              ],
+              ),
             ),
-          )
-
-      ),
+            NumericPad(
+              onNumberSelected: (value) {
+                setState(() {
+                  check = true;
+                  // if(phoneNumber.length<10) {
+                  if (value != -1) {
+                    if (phoneNumber.length < 10) {
+                      phoneNumber = phoneNumber + value.toString();
+                    }
+                    print("asd");
+                  } else {
+                    if (phoneNumber != "") {
+                      phoneNumber =
+                          phoneNumber.substring(0, phoneNumber.length - 1);
+                    }
+                    print("Asd");
+                  }
+                  // }
+                });
+              },
+            ),
+          ],
+        ),
+      )),
     );
   }
 }

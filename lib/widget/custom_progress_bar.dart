@@ -42,7 +42,7 @@ class FiduProgressDialog {
     );
   }
 
-  void dismissDialog(context) {
+   dismissDialog(context) {
     // print("Progress Dialog : Dismiss called $isProgressVisible");
     if (!isProgressVisible) {
       return;
