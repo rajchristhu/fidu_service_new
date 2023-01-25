@@ -59,6 +59,7 @@ class HomeService {
         .toList();
   }
   Future<List<ProductDetailModel>> getProductDetail(id) async {
+    print(id);
     QuerySnapshot<Map<String, dynamic>> snapshot =
     await _db.collection("kadaiItem").doc(id).collection("food")
         // .where('id', isEqualTo: id.toString())

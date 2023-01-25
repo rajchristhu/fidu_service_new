@@ -1,6 +1,6 @@
 class CheckoutModel {
   late String landmark, address, product, totalPrice, date;
-  late int status;
+  late String status;
 
   CheckoutModel({
     required this.landmark,
@@ -14,9 +14,8 @@ class CheckoutModel {
   CheckoutModel.fromJson(Map<dynamic, dynamic> map) {
     landmark = map['landmark'];
     address = map['address'];
-    product = map['product'];
+    product = map['deleveryperson'];
     totalPrice = map['totalPrice'];
-    date = map['date'];
     status = map['status'];
   }
 

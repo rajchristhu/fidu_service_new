@@ -28,6 +28,7 @@ int? status;
   }
 
   _getCheckoutsFromFireStore() async {
+    print("dsfi");
     _isLoading.value=true;
     _checkouts = [];
     List<QueryDocumentSnapshot> _checkoutsSnapshot =
@@ -45,7 +46,7 @@ int? status;
       address: address!,
       landmark: landmark!,
       product: product!,
-      status: status!,
+      status: status.toString(),
       totalPrice: Get.find<CartViewModel>().totalPrice.toString(),
       date: DateFormat.yMMMd().add_jm().format(DateTime.now()),
     ));

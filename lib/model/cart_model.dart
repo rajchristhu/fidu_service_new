@@ -7,7 +7,7 @@ class CartModel {
     required this.image,
     required this.price,
     required this.productId,
-    this.quantity = 1,
+    this.quantity = 0,
   });
 
   CartModel.fromJson(Map<dynamic, dynamic> map) {
@@ -27,4 +27,13 @@ class CartModel {
       'quantity': quantity,
     };
   }
+}
+
+class Shop {
+  String storeId = "";
+  String storeName = "";
+
+  Shop._privateConstructor();
+
+  static final Shop instance = Shop._privateConstructor();
 }

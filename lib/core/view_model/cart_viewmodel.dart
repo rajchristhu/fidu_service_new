@@ -26,15 +26,15 @@ class CartViewModel extends GetxController {
     getTotalPrice();
     update();
   }
+
   changeStatus() {
-    if(checkBool.isTrue){
+    if (checkBool.isTrue) {
       checkBool.toggle();
-    }
-    else {
+    } else {
       checkBool.value = true; //or pressedBool.toggle();
     }
-
   }
+
   addProduct(CartModel cartModel) async {
     bool _isExist = false;
     _cartProducts.forEach((element) {
@@ -66,18 +66,18 @@ class CartViewModel extends GetxController {
     });
   }
 
-  increaseQuantity(int index) async {
-    _cartProducts[index].quantity++;
+  increaseQuantity(cartProduct) async {
+    cartProduct.quantity++;
     getTotalPrice();
-    await LocalDatabaseCart.db.update(_cartProducts[index]);
+    await LocalDatabaseCart.db.update(cartProduct);
     update();
   }
 
-  decreaseQuantity(int index) async {
-    if (_cartProducts[index].quantity != 0) {
-      _cartProducts[index].quantity--;
+  decreaseQuantity(cartProduct) async {
+    if (cartProduct.quantity != 0) {
+      cartProduct.quantity--;
       getTotalPrice();
-      await LocalDatabaseCart.db.update(_cartProducts[index]);
+      await LocalDatabaseCart.db.update(cartProduct);
       update();
     }
   }

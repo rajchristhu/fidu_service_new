@@ -38,8 +38,8 @@ class _CartPageState extends State<CartPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    CartSummary(controller),
                     CartListPage(controller),
-                    CartSummary(controller)
                   ]),
             )));
   }

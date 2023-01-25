@@ -1,27 +1,45 @@
+import 'package:fidu_service/core/service/local_database_cart.dart';
+import 'package:fidu_service/model/cart_model.dart';
+import 'package:fidu_service/model/product_detail_model.dart';
 import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:get/get.dart';
+
+import '../../../core/view_model/cart_viewmodel.dart';
 
 class FoodInRestaurant extends StatefulWidget {
-  FoodInRestaurant({Key? key});
+  ProductDetailModel productDetailModel;
+  List<CartModel> _cartProducts;
+  String restaurantName;
+
+  FoodInRestaurant(this.productDetailModel, this._cartProducts, this.restaurantName, {Key? key});
 
   @override
   State<FoodInRestaurant> createState() => _FoodInRestaurantState();
 }
 
 class _FoodInRestaurantState extends State<FoodInRestaurant> {
-  int counter = 0;
-
   @override
   void initState() {
     super.initState();
-    counter = 0;
   }
 
   @override
   Widget build(BuildContext context) {
+    CartModel cartModel = CartModel(
+        name: widget.productDetailModel.name!,
+        image: widget.productDetailModel.image!,
+        price: widget.productDetailModel.rate!,
+        productId: widget.productDetailModel.productId!,
+        quantity: 0);
+    for (int i = 0; i < widget._cartProducts.length; i++) {
+      if (widget._cartProducts[i].productId == cartModel.productId) {
+        cartModel.quantity = widget._cartProducts[i].quantity;
+      }
+    }
     return Padding(
       padding: EdgeInsets.all(10),
       child: Row(
@@ -45,8 +63,7 @@ class _FoodInRestaurantState extends State<FoodInRestaurant> {
                       fit: BoxFit.cover,
                       width: 110,
                       height: 110,
-                      imageUrl:
-                          "https://d3jmn01ri1fzgl.cloudfront.net/photoadking/webp_thumbnail/5fe3257ad6874_json_image_1608721786.webp",
+                      imageUrl: widget.productDetailModel.image!,
                       placeholder: (context, url) => Container(
                         width: MediaQuery.of(context).size.width,
                         color: HexColor("#8AE2E2E2"),
@@ -75,7 +92,7 @@ class _FoodInRestaurantState extends State<FoodInRestaurant> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Biriyani",
+                                widget.productDetailModel.name!,
                                 style: TextStyle(
                                     color: blackColor,
                                     fontSize: 17,
@@ -85,7 +102,7 @@ class _FoodInRestaurantState extends State<FoodInRestaurant> {
                                 height: 3,
                               ),
                               Text(
-                                "Pizza",
+                                widget.productDetailModel.description!,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
@@ -108,93 +125,137 @@ class _FoodInRestaurantState extends State<FoodInRestaurant> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          child: counter == 0
-                              ? SizedBox(
-                                  width: 75,
-                                  height: 25,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      counter++;
-                                      setState(() {});
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(7),
-                                        ),
-                                        backgroundColor: whiteColor,
-                                        padding: EdgeInsets.all(0)),
-                                    child: Text("Add",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: primaryColorDark,
-                                            fontWeight: FontWeight.w600)),
-                                  ),
-                                )
-                              : Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: 25,
-                                      height: 25,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          counter--;
-                                          setState(() {});
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(3),
+                        GetBuilder<CartViewModel>(
+                            builder: (controllers) => SizedBox(
+                                  child: cartModel.quantity == 0
+                                      ? SizedBox(
+                                          width: 75,
+                                          height: 25,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              if (Shop.instance.storeId == "" ||
+                                                  Shop.instance.storeId !=
+                                                      widget.productDetailModel
+                                                          .id) {
+                                                Shop.instance.storeId = widget
+                                                    .productDetailModel.id!;
+                                                Shop.instance.storeName = widget.restaurantName;
+                                                controllers.removeAllProducts();
+                                              }
+                                              cartModel.quantity++;
+                                              controllers.addProduct(cartModel);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(7),
+                                                ),
+                                                backgroundColor: whiteColor,
+                                                padding: EdgeInsets.all(0)),
+                                            child: Text("Add",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: primaryColorDark,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                          ),
+                                        )
+                                      : Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: 25,
+                                              height: 25,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  if (cartModel.quantity == 1) {
+                                                    cartModel.quantity = 0;
+                                                    controllers.removeProduct(
+                                                        cartModel.productId);
+                                                  } else {
+                                                    controllers
+                                                        .decreaseQuantity(
+                                                            cartModel);
+                                                  }
+                                                  controllers
+                                                      .getCartProducts()
+                                                      .then((value) {
+                                                    widget._cartProducts =
+                                                        value;
+                                                  });
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              3),
+                                                    ),
+                                                    backgroundColor:
+                                                        primaryColorDarkOne,
+                                                    padding: EdgeInsets.all(0)),
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  color: whiteColor,
+                                                  size: 18,
+                                                ),
+                                              ),
                                             ),
-                                            backgroundColor:
-                                                primaryColorDarkOne,
-                                            padding: EdgeInsets.all(0)),
-                                        child: Icon(
-                                          Icons.remove,
-                                          color: whiteColor,
-                                          size: 18,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      "$counter",
-                                      style: TextStyle(
-                                        color: textColorSmall,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    SizedBox(
-                                      width: 25,
-                                      height: 25,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          counter++;
-                                          setState(() {});
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(3),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              "${cartModel.quantity}",
+                                              style: TextStyle(
+                                                color: textColorSmall,
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.w500,
+                                              ),
                                             ),
-                                            backgroundColor:
-                                                primaryColorDarkOne,
-                                            padding: EdgeInsets.all(0)),
-                                        child: Icon(
-                                          Icons.add,
-                                          color: whiteColor,
-                                          size: 18,
+                                            const SizedBox(width: 10),
+                                            SizedBox(
+                                              width: 25,
+                                              height: 25,
+                                              child: ElevatedButton(
+                                                onPressed: () {
+                                                  // cartModel.quantity++;
+                                                  cartModel.quantity == 0
+                                                      ? controllers
+                                                          .removeProduct(
+                                                              cartModel
+                                                                  .productId)
+                                                      : controllers
+                                                          .increaseQuantity(
+                                                              cartModel);
+                                                  controllers
+                                                      .getCartProducts()
+                                                      .then((value) {
+                                                    widget._cartProducts =
+                                                        value;
+                                                    // setState(() {});
+                                                  });
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              3),
+                                                    ),
+                                                    backgroundColor:
+                                                        primaryColorDarkOne,
+                                                    padding: EdgeInsets.all(0)),
+                                                child: Icon(
+                                                  Icons.add,
+                                                  color: whiteColor,
+                                                  size: 18,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                        )
+                                ))
                       ],
                     ),
                     const SizedBox(

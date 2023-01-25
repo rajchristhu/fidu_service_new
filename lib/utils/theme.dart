@@ -11,6 +11,7 @@ Color original = HexColor("#FF512F");
 Color or = HexColor("#F7692F");
 Color accentColor = HexColor("#f85032");
 Color textColor = HexColor("#686B78");
+Color subStringColor = HexColor("#686B78");
 Color textColorSmall = HexColor("#93959F");
 Color secondryColor =HexColor("#0074AD");
 Color grayColor = HexColor("#E2E2E2");

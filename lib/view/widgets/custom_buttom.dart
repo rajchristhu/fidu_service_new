@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../res/Resources.dart';
 
+import '../../resources/colors.dart';
 import 'custom_text.dart';
 
 class CustomButton extends StatelessWidget {
@@ -11,10 +12,16 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Resources(context).color.colorPrimary,
-        elevation: 0,
+    return TextButton(
+      style: ButtonStyle(
+          padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.all(15)),
+          foregroundColor: MaterialStateProperty.all<Color>(accentColor),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  side: BorderSide(color: grayColor)
+              )
+          )
       ),
       onPressed: onPressedFn,
       child: CustomText(

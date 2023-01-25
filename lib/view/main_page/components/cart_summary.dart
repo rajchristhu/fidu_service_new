@@ -35,12 +35,13 @@ class _CartSummaryState extends State<CartSummary> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
+                      const SizedBox(height: 30),
                       SizedBox(
                         child: Text(
                           "Cart Summary ",
                           style: TextStyle(
-                              color: blackColor,
-                              fontSize: 17.0,
+                              color: textColor,
+                              fontSize: 16.0,
                               fontWeight: FontWeight.w700),
                         ),
                       ),
@@ -48,8 +49,8 @@ class _CartSummaryState extends State<CartSummary> {
                         height: 5,
                       ),
                       Container(
-                        width: 50.0,
-                        height: 1,
+                        width: 80.0,
+                        height: 2,
                         margin: const EdgeInsets.symmetric(
                             vertical: 0.0, horizontal: 2.0),
                         decoration: BoxDecoration(
@@ -65,12 +66,13 @@ class _CartSummaryState extends State<CartSummary> {
                       ),
                       Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                               flex: 1,
                               child: Text(
                                 "Price: ",
                                 style: TextStyle(
                                     fontSize: 16,
+                                    color: textColor,
                                     fontWeight: FontWeight.normal),
                               )),
                           Expanded(
@@ -79,6 +81,7 @@ class _CartSummaryState extends State<CartSummary> {
                                   "₹ " +
                                       widget.controller.totalPrice.toString(),
                                   style: TextStyle(
+                                      color: textColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.normal))),
                         ],
@@ -87,17 +90,19 @@ class _CartSummaryState extends State<CartSummary> {
                         height: 10,
                       ),
                       Row(
-                        children: const [
+                        children: [
                           Expanded(
                               flex: 1,
                               child: Text("Delivery Charge: ",
                                   style: TextStyle(
+                                      color: textColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.normal))),
                           Expanded(
                               flex: 1,
                               child: Text("₹ 50",
                                   style: TextStyle(
+                                      color: textColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.normal))),
                         ],
@@ -105,16 +110,17 @@ class _CartSummaryState extends State<CartSummary> {
                       const SizedBox(
                         height: 10,
                       ),
-                      MySeparator(),
+                      MySeparator(color: grayColor,),
                       const SizedBox(
                         height: 10,
                       ),
                       Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                               flex: 1,
                               child: Text("Total Price: ",
                                   style: TextStyle(
+                                      color: textColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.normal))),
                           Expanded(
@@ -123,7 +129,8 @@ class _CartSummaryState extends State<CartSummary> {
                                   "₹ " +
                                       (widget.controller.totalPrice + 50)
                                           .toString(),
-                                  style: const TextStyle(
+                                  style: TextStyle(
+                                      color: textColor,
                                       fontSize: 16,
                                       fontWeight: FontWeight.normal))),
                         ],
@@ -133,23 +140,18 @@ class _CartSummaryState extends State<CartSummary> {
                       ),
                       Container(
                           decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(8),
-                                bottomRight: Radius.circular(8),
-                                topLeft: Radius.circular(8),
-                                topRight: Radius.circular(8),
+                              borderRadius: const BorderRadius.all( Radius.circular(60),
                               ),
                               color: Resources(context).color.colorPrimary),
                           width: MediaQuery.of(context).size.width,
                           height: 45,
                           child: CustomButton(
-                            'Proceed ',
+                            'Order Now ',
                             () {
                               Get.dialog(
                                 AlertDialog(
                                   content: SingleChildScrollView(
-                                    child: AddressWidget(context)
-                                  ),
+                                      child: AddressWidget(context)),
                                 ),
                                 barrierDismissible: false,
                               );
@@ -162,11 +164,15 @@ class _CartSummaryState extends State<CartSummary> {
                               //       return AddressWidget(context);
                               //     });
                             },
-                          ))
+                          )),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      MySeparator(color: grayColor,),
                     ]),
               ),
               const SizedBox(
-                height: 20,
+                height: 0,
               ),
             ],
           )

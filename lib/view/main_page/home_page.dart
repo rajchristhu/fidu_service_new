@@ -303,22 +303,13 @@ class _HomeMainPageState extends State<HomeMainPage> {
               const SizedBox(
                 height: 4,
               ),
-              _currentPosition != null &&
-                  _currentAddress != null?
-              Text(_currentAddress!,
+              Text(_currentAddress??"--",
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     color: blackColor,
                     fontSize: 14.0,
                     fontWeight: FontWeight.w600),
-              ): Text("--",
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: blackColor,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w600),
-              ),
-
+              )
             ],
           )
 

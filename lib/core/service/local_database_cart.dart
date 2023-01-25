@@ -3,7 +3,6 @@ import 'package:path/path.dart';
 
 import '../../model/cart_model.dart';
 
-
 class LocalDatabaseCart {
   LocalDatabaseCart._();
 
@@ -54,13 +53,15 @@ class LocalDatabaseCart {
     );
   }
 
-  deleteProduct(String productId) async {
+  Future<bool> deleteProduct(String productId) async {
+    bool isUpdated = false;
     Database _db = await database;
     await _db.delete(
       'cartProducts',
       where: 'productId = ?',
       whereArgs: [productId],
-    );
+    ).then((value) => isUpdated = true);
+    return isUpdated;
   }
 
   deleteAllProducts() async {
@@ -68,13 +69,15 @@ class LocalDatabaseCart {
     await _db.delete('cartProducts');
   }
 
-  update(CartModel cartModel) async {
+  Future<bool> update(CartModel cartModel) async {
+    bool isUpdated = false;
     Database _db = await database;
     await _db.update(
       'cartProducts',
       cartModel.toJson(),
       where: 'productId = ?',
       whereArgs: [cartModel.productId],
-    );
+    ).then((value) => isUpdated = true);
+    return isUpdated;
   }
 }

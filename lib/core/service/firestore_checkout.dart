@@ -8,11 +8,12 @@ class FirestoreCheckout {
   final CollectionReference _ordersCollection = FirebaseFirestore.instance
       // .collection('users')
       // .doc(FirebaseAuth.instance.currentUser!.uid)
-      .collection('orders');
-
+      .collection('order');
   Future<List<QueryDocumentSnapshot>> getOrdersFromFirestore() async {
+    print("asdjasd");
+
     var _orders =
-        await _ordersCollection.orderBy('date', descending: true).get();
+        await _ordersCollection.where("status",isEqualTo: "open").get();
     return _orders.docs;
   }
 

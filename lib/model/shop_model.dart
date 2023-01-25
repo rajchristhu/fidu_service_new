@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import '../helper/extenstion.dart';
 
 class ShopModel {
-  String? name, image, description, place,rate,offer, price,id,productId;
+  String? name, image, description, place,rate,offer, price,id,productId,type;
 
-  ShopModel({this.name, this.image, this.description, this.place, this.rate, this.offer, this.price, this.id, this.productId});
+  ShopModel({this.name, this.image, this.description, this.place, this.rate, this.offer, this.price, this.id, this.productId, this.type});
 
   ShopModel.fromJson(Map<dynamic, dynamic> map) {
     if (map == null) {
@@ -20,7 +20,8 @@ class ShopModel {
     offer = map['maindish'];
     price = map['phoneno'];
     id = map['id'];
-    productId = map['type'];
+    productId = map['itemId'];
+    type = map['type'];
   }
 
   toJson() {
@@ -33,7 +34,8 @@ class ShopModel {
       'maindish': offer,
       'phoneno': price,
       'id': id,
-      'productId': productId,
+      'itemId': productId,
+      'type': type,
     };
   }
 }

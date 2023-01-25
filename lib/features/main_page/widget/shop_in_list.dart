@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fidu_service/core/view_model/home_view_model.dart';
 import 'package:fidu_service/features/main_page/pages/shop_info_page.dart';
 import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/material.dart';
@@ -6,19 +7,32 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../core/view_model/product_detail_vm.dart';
+import '../../../model/shop_model.dart';
+
 class ShopWidget extends StatelessWidget {
-  const ShopWidget({Key? key, required this.carousalList, required this.index})
+  const ShopWidget({Key? key, required this.carousalList, required this.index,required this.controller})
       : super(key: key);
 
-  final List<DocumentSnapshot<Object?>> carousalList;
+  final List<ShopModel> carousalList;
   final int index;
+  final HomeViewModel controller;
+
   // final
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.to(ShopInfo());
+        Get.put(ProductDetailViewModel());
+        Get.find<ProductDetailViewModel>().id =
+        controller.shopModel[index].id!;
+        Get.to(
+           ShopInfo(carousalList[index].name!),
+        );
+        Get.find<ProductDetailViewModel>()
+            .getProductDetail();
+        // Get.to(ShopInfo());
       },
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -41,7 +55,7 @@ class ShopWidget extends StatelessWidget {
                       fit: BoxFit.cover,
                       width: 110,
                       height: 110,
-                      imageUrl: carousalList[index]["kadaiImage"],
+                      imageUrl: carousalList[index].image!,
                       placeholder: (context, url) => Container(
                         width: MediaQuery.of(context).size.width,
                         color: HexColor("#8AE2E2E2"),
@@ -62,7 +76,7 @@ class ShopWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      carousalList[index]["name"],
+                      carousalList[index].name!,
                       style: TextStyle(
                           color: blackColor,
                           fontSize: 17,
@@ -72,7 +86,9 @@ class ShopWidget extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                (carousalList[index]["maindish"]).toString().trim()!=""?carousalList[index]["maindish"]:"-",
+                      (carousalList[index].offer).toString().trim() != ""
+                          ? carousalList[index].offer!
+                          : "-",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -84,7 +100,9 @@ class ShopWidget extends StatelessWidget {
                       height: 3,
                     ),
                     Text(
-                      (carousalList[index]["address"]).toString().trim()!=""?carousalList[index]["address"]:"-",
+                      (carousalList[index].description).toString().trim() != ""
+                          ? carousalList[index].description!
+                          : "-",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -153,7 +171,9 @@ class ShopWidget extends StatelessWidget {
                     Row(
                       children: [
                         Image.asset(
-                          carousalList[index]["type"]=="veg"?'assets/pages/veg.png':"assets/pages/non-veg.png",
+                          carousalList[index].type == "veg"
+                              ? 'assets/pages/veg.png'
+                              : "assets/pages/non-veg.png",
                           height: 14,
                           width: 14,
                         ),

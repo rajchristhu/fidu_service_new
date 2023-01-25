@@ -93,8 +93,9 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                   : const EdgeInsets.only(
                                   top: 16, left: 16, right: 16),
                               child: ShopWidget(
-                                  carousalList: dataSnapshot.data!,
-                                  index: index),
+                                  carousalList: controller.shopModel!,
+                                  index: index,
+                                  controller:controller),
                             )
                           ],
                         ),
@@ -109,12 +110,12 @@ class _ShoppingPageState extends State<ShoppingPage> {
                     physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
                     scrollDirection: Axis.vertical,
-                    itemCount: dataSnapshot.data!.length,
+                    itemCount: controller.shopModel!.length,
                     itemBuilder: (BuildContext context, int index) =>
                         Column(
                           children: [
                             Container(
-                                padding: dataSnapshot.data!.length == index
+                                padding: controller.shopModel.length == index
                                     ? const EdgeInsets.only(
                                     bottom: 16, left: 16, right: 16)
                                     : 0 == index
@@ -161,7 +162,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                                   width: 110,
                                                   height: 110,
                                                   imageUrl:
-                                                  dataSnapshot.data![index]["kadaiImage"],
+                                                  controller.shopModel[index].image!,
                                                   placeholder:
                                                       (context, url) =>
                                                       Container(

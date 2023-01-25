@@ -21,6 +21,7 @@ class OrderDetail extends StatefulWidget {
 class _OrderDetailState extends State<OrderDetail> {
   @override
   Widget build(BuildContext context) {
+    print("dsfds");
     return GetBuilder<CheckoutViewModel>(
         init: Get.find<CheckoutViewModel>(),
         builder: (controller) => controller.isLoading.value
@@ -248,9 +249,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                                   ],
                                                 ),
                                                 ScreenProgress(
-                                                    ticks: controller
-                                                        .checkouts[index]
-                                                        .status,
+                                                    ticks: 0,
                                                     contexts: context)
                                               ],
                                             ),
