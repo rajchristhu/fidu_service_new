@@ -44,7 +44,8 @@ class _ShopInfoState extends State<ShopInfo> {
     return GetBuilder<ProductDetailViewModel>(
         init: Get.find<ProductDetailViewModel>(),
         builder: (controller) => controller.loading.value
-            ? Container(child: FiduProgressDialog.instance.showProgressDialog(context),)
+            ? Container(
+          color:Colors.white,child: FiduProgressDialog.instance.showProgressDialog(context),)
             : ShopWidget(controller,_cartProducts,widget.storeName));
   }
 }

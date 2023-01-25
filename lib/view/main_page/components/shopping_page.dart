@@ -86,11 +86,12 @@ class _ShoppingPageState extends State<ShoppingPage> {
                                     Get.put(ProductDetailViewModel());
                                     Get.find<ProductDetailViewModel>().id =
                                         controller.shopModel[index].id!;
+                                    Get.find<ProductDetailViewModel>()
+                                        .getProductDetail();
                                     Get.to(
                                       const ProductDetailPage(),
                                     );
-                                    Get.find<ProductDetailViewModel>()
-                                        .getProductDetail();
+
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.start,

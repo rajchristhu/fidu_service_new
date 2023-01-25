@@ -143,7 +143,7 @@ class ShopWidget extends StatelessWidget {
             ],
           )
         : Container(
-            color: Colors.white,
+            color: Colors.red,
           );
   }
 }
