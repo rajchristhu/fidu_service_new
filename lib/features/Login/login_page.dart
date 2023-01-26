@@ -1,6 +1,7 @@
 import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../../util/secure_storage.dart';
 import 'numeric_pad.dart';
 import 'verify_phone.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,52 +15,38 @@ class ContinueWithPhone extends StatefulWidget {
 
 class _ContinueWithPhoneState extends State<ContinueWithPhone> {
   String phoneNumber = "";
+  String countryCode = "+91 ";
   bool check = false;
   FirebaseAuth auth = FirebaseAuth.instance;
 
   login() async {
-    print("sdfdfndf");
-    await auth.verifyPhoneNumber(
-      phoneNumber: '+919597138105',
-      timeout: Duration(seconds: 60),
-      verificationCompleted: (PhoneAuthCredential credential) {
-        print("adfjadsf");
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        if (e.code == 'invalid-phone-number') {
-          print('The provided phone number is not valid.');
-        }
-      },
-      codeSent: (String verificationId, int? resendToken) async {
-        showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (context) {
-              return InkWell(
-                onTap: () async {
-                  String smsCode = '123456';
-
-                  // Create a PhoneAuthCredential with the code
-                  PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: smsCode);
-
-                  // Sign the user in (or link) with the credential
-                  await auth.signInWithCredential(credential).then((value) =>
-                  {
-                    print("value.user!.displayName!"),
-                    print(value.user!.displayName!),
-                    print(value.user!.phoneNumber!),
-
-                  });
-
-                },
-                child: Text("fdsfsfdsdfsfsfsfsf"),
-              )
-                ;
+    await auth
+        .verifyPhoneNumber(
+          phoneNumber: countryCode + phoneNumber,
+          timeout: const Duration(seconds: 60),
+          verificationCompleted: (PhoneAuthCredential credential) {
+            print("SMS Code ${credential.smsCode}");
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            print(e.code);
+            if (e.code == 'invalid-phone-number') {
+              print('The provided phone number is not valid.');
             }
-        );
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    ).then((value) => {print("adfdf")});
+          },
+          codeSent: (String verificationId, int? resendToken) async {
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => VerifyPhone(
+                      phoneNumber: phoneNumber,
+                      verificationId: verificationId,
+                      resendToken: resendToken)),
+            );
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {},
+        )
+        .then((value) => {print("adfdf")});
   }
 
   @override
@@ -89,16 +76,17 @@ class _ContinueWithPhoneState extends State<ContinueWithPhone> {
       body: SafeArea(
           child: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.white,
-            orwhite,
-            orwhite,
-            orwhite,
-          ],
-        )),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.white,
+              orwhite,
+              orwhite,
+              orwhite,
+            ],
+          ),
+        ),
         child: Column(
           children: <Widget>[
             Expanded(
@@ -156,7 +144,7 @@ class _ContinueWithPhoneState extends State<ContinueWithPhone> {
                           Row(
                             children: [
                               Text(
-                                "+91 ",
+                                countryCode,
                                 style: TextStyle(
                                   fontSize: 24,
                                   color: grayColor1,
@@ -179,13 +167,10 @@ class _ContinueWithPhoneState extends State<ContinueWithPhone> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          // login();
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    VerifyPhone(phoneNumber: phoneNumber)),
-                          );
+                          login();
+                          // SecureStorage.instance
+                          //     .read("UID")
+                          //     .then((value) => print("UID ${value}"));
                         },
                         child: Container(
                           height: 50,
@@ -216,20 +201,12 @@ class _ContinueWithPhoneState extends State<ContinueWithPhone> {
               onNumberSelected: (value) {
                 setState(() {
                   check = true;
-                  // if(phoneNumber.length<10) {
-                  if (value != -1) {
-                    if (phoneNumber.length < 10) {
-                      phoneNumber = phoneNumber + value.toString();
-                    }
-                    print("asd");
-                  } else {
-                    if (phoneNumber != "") {
-                      phoneNumber =
-                          phoneNumber.substring(0, phoneNumber.length - 1);
-                    }
-                    print("Asd");
+                  if (value == -1 && phoneNumber != "") {
+                    phoneNumber =
+                        phoneNumber.substring(0, phoneNumber.length - 1);
+                  } else if (phoneNumber.length < 10 && value != -1) {
+                    phoneNumber += value.toString();
                   }
-                  // }
                 });
               },
             ),

@@ -106,7 +106,7 @@ class AutoCompleteSearchState extends State<AutoCompleteSearch> {
         height: widget.height,
         padding: const EdgeInsets.only(right: 10),
         color: Theme.of(context).brightness == Brightness.dark ? Colors.black54 : Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(10),
         elevation: 4.0,
         child: Row(
           children: <Widget>[

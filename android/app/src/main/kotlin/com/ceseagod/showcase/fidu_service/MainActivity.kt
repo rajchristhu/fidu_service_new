@@ -1,4 +1,4 @@
-package com.ceseagod.showcase.fidu_service
+package com.ceseagod.showcase
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,7 @@
 import 'package:fidu_service/resources/colors.dart';
 import 'package:fidu_service/resources/strings.dart';
 import 'package:fidu_service/util/connectivity_service.dart';
+import 'package:fidu_service/util/secure_storage.dart';
 import 'package:fidu_service/view/control_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
@@ -16,6 +17,7 @@ void main() async {
   ConnectionStatusSingleton connectionStatus =
       ConnectionStatusSingleton.getInstance();
   connectionStatus.initialize();
+  SecureStorage.instance.init();
   runApp(const MyApp());
 }
 

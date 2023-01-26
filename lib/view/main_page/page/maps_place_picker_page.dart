@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:io' show Platform;
 
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
+
 
 import '../../../google_maps_place_picker/src/models/circle_area.dart';
 import '../../../google_maps_place_picker/src/models/pick_result.dart';
@@ -30,19 +32,20 @@ class _MapsPlacePickerState extends State<MapsPlacePicker> {
   String _mapsRenderer = "auto";
 
   void initRenderer() {
+    print("loading");
     if (_mapsInitialized) return;
-    // if (widget.mapsImplementation is GoogleMapsFlutterAndroid) {
-    //   switch (_mapsRenderer) {
-    //     case "legacy":
-    //       (widget.mapsImplementation as GoogleMapsFlutterAndroid)
-    //           .initializeWithRenderer(AndroidMapRenderer.legacy);
-    //       break;
-    //     case "latest":
-    //       (widget.mapsImplementation as GoogleMapsFlutterAndroid)
-    //           .initializeWithRenderer(AndroidMapRenderer.latest);
-    //       break;
-    //   }
-    // }
+    if (widget.mapsImplementation is GoogleMapsFlutterAndroid) {
+      switch (_mapsRenderer) {
+        case "legacy":
+          (widget.mapsImplementation as GoogleMapsFlutterAndroid)
+              .initializeWithRenderer(AndroidMapRenderer.legacy);
+          break;
+        case "latest":
+          (widget.mapsImplementation as GoogleMapsFlutterAndroid)
+              .initializeWithRenderer(AndroidMapRenderer.latest);
+          break;
+      }
+    }
     setState(() {
       _mapsInitialized = true;
     });
@@ -51,7 +54,7 @@ class _MapsPlacePickerState extends State<MapsPlacePicker> {
   @override
   Widget build(BuildContext context) {
     return PlacePicker(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       apiKey: Platform.isAndroid ? ApiKeys.androidApiKey : ApiKeys.iosApiKey,
       hintText: "Search Location ...",
       searchingText: "Please wait ...",
@@ -65,7 +68,7 @@ class _MapsPlacePickerState extends State<MapsPlacePicker> {
       zoomGesturesEnabled: true,
       zoomControlsEnabled: true,
       onMapCreated: (GoogleMapController controller) {
-        print("Map created");
+        print("Map created : ${selectedPlace?.name!}");
       },
       onPlacePicked: (PickResult result) {
         print("Place picked: ${result.formattedAddress}");

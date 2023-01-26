@@ -13,7 +13,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:fidu_service/features/dashboard/dashboard.dart';
+import 'package:permission_handler/permission_handler.dart';
 
+import '../../util/secure_storage.dart';
 import '../../view/main_page/page/cart_page.dart';
 import '../../view/main_page/page/maps_place_picker_page.dart';
 import '../../view/main_page/page/order_page.dart';
@@ -85,6 +87,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
     super.initState();
     _page = 2;
     _getCurrentLocation();
+
+
   }
 
   _getCurrentLocation() {
@@ -118,6 +122,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
+    SecureStorage.instance.read("uid").then((value) =>  print("UID : "+value));
     return Scaffold(
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
@@ -406,8 +411,18 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 width: 0,
               ),
               InkWell(
-                onTap: () {
-                  Get.to(MapsPlacePicker());
+                onTap: () async {
+                  if (Platform.isAndroid &&
+                      await Permission
+                          .locationWhenInUse.serviceStatus.isEnabled) {
+                    print("Permission Granted");
+                    Get.to(MapsPlacePicker());
+                  } else if (Platform.isIOS) {
+                    print("IOS Plartform");
+                    Get.to(MapsPlacePicker());
+                  } else {
+                    print("Permission denied");
+                  }
                 },
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

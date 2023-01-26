@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
-import 'package:geolocator/geolocator.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -14,9 +13,9 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
+import '../../view/main_page/widget/address_from_map.dart';
 import '../providers/place_provider.dart';
 import 'components/animated_pin.dart';
-import 'components/floating_card.dart';
 import 'models/circle_area.dart';
 import 'models/pick_result.dart';
 
@@ -188,9 +187,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
                   ))),
         if (!this.fullMotion) _buildGoogleMap(context),
         if (!this.fullMotion) _buildPin(),
-        _buildFloatingCard(),
+        _bottomAddressBar(),
         _buildMapIcons(context),
-        _buildZoomButtons()
       ],
     );
   }
@@ -371,7 +369,7 @@ class GoogleMapPlacePicker extends StatelessWidget {
     }
   }
 
-  Widget _buildFloatingCard() {
+  Widget _bottomAddressBar() {
     return Selector<PlaceProvider,
         Tuple4<PickResult?, SearchingState, bool, PinState>>(
       selector: (_, provider) => Tuple4(
@@ -380,190 +378,8 @@ class GoogleMapPlacePicker extends StatelessWidget {
           provider.isSearchBarFocused,
           provider.pinState),
       builder: (context, data, __) {
-        if ((data.item1 == null && data.item2 == SearchingState.Idle) ||
-            data.item3 == true ||
-            data.item4 == PinState.Dragging &&
-                this.hidePlaceDetailsWhenDraggingPin!) {
-          return Container();
-        } else {
-          if (selectedPlaceWidgetBuilder == null) {
-            return _defaultPlaceWidgetBuilder(context, data.item1, data.item2);
-          } else {
-            return Builder(
-                builder: (builderContext) => selectedPlaceWidgetBuilder!(
-                    builderContext, data.item1, data.item2, data.item3));
-          }
-        }
+        return AddressSelect(data.item1);
       },
-    );
-  }
-
-  Widget _buildZoomButtons() {
-    return Selector<PlaceProvider, Tuple2<GoogleMapController?, LatLng?>>(
-      selector: (_, provider) => new Tuple2<GoogleMapController?, LatLng?>(
-          provider.mapController, provider.cameraPosition?.target),
-      builder: (context, data, __) {
-        if (!this.zoomControlsEnabled ||
-            data.item1 == null ||
-            data.item2 == null) {
-          return Container();
-        } else {
-          return Positioned(
-            bottom: 50,
-            right: 10,
-            child: Card(
-              elevation: 4.0,
-              child: Container(
-                width: 40,
-                height: 100,
-                child: Column(
-                  children: <Widget>[
-                    IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () async {
-                          double currentZoomLevel =
-                              await data.item1!.getZoomLevel();
-                          currentZoomLevel = currentZoomLevel + 2;
-                          data.item1!.animateCamera(
-                            CameraUpdate.newCameraPosition(
-                              CameraPosition(
-                                target: data.item2!,
-                                zoom: currentZoomLevel,
-                              ),
-                            ),
-                          );
-                        }),
-                    SizedBox(height: 2),
-                    IconButton(
-                        icon: Icon(Icons.remove),
-                        onPressed: () async {
-                          double currentZoomLevel =
-                              await data.item1!.getZoomLevel();
-                          currentZoomLevel = currentZoomLevel - 2;
-                          if (currentZoomLevel < 0) currentZoomLevel = 0;
-                          data.item1!.animateCamera(
-                            CameraUpdate.newCameraPosition(
-                              CameraPosition(
-                                target: data.item2!,
-                                zoom: currentZoomLevel,
-                              ),
-                            ),
-                          );
-                        }),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }
-      },
-    );
-  }
-
-  Widget _defaultPlaceWidgetBuilder(
-      BuildContext context, PickResult? data, SearchingState state) {
-    return FloatingCard(
-      bottomPosition: MediaQuery.of(context).size.height * 0.1,
-      leftPosition: MediaQuery.of(context).size.width * 0.15,
-      rightPosition: MediaQuery.of(context).size.width * 0.15,
-      width: MediaQuery.of(context).size.width * 0.7,
-      borderRadius: BorderRadius.circular(12.0),
-      elevation: 4.0,
-      color: Theme.of(context).cardColor,
-      child: state == SearchingState.Searching
-          ? _buildLoadingIndicator()
-          : _buildSelectionDetails(context, data!),
-    );
-  }
-
-  Widget _buildLoadingIndicator() {
-    return Container(
-      height: 48,
-      child: const Center(
-        child: SizedBox(
-          width: 24,
-          height: 24,
-          child: CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSelectionDetails(BuildContext context, PickResult result) {
-    double _value = 0.0;
-    Geolocator()
-        .distanceBetween(pickArea!.center.latitude, pickArea!.center.longitude,
-            result.geometry!.location.lat, result.geometry!.location.lng)
-        .then((value) => _value = value);
-    bool canBePicked =
-        pickArea == null || pickArea!.radius <= 0 || _value <= pickArea!.radius;
-    MaterialStateColor buttonColor = MaterialStateColor.resolveWith(
-        (states) => canBePicked ? Colors.lightGreen : Colors.red);
-    return Container(
-      margin: EdgeInsets.all(10),
-      child: Column(
-        children: <Widget>[
-          Text(
-            result.formattedAddress!,
-            style: TextStyle(fontSize: 18),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 10),
-          (canBePicked && (selectText?.isEmpty ?? true)) ||
-                  (!canBePicked && (outsideOfPickAreaText?.isEmpty ?? true))
-              ? SizedBox.fromSize(
-                  size: Size(56, 56), // button width and height
-                  child: ClipOval(
-                    child: Material(
-                      child: InkWell(
-                          overlayColor: buttonColor,
-                          onTap: () {
-                            if (canBePicked) {
-                              onPlacePicked!(result);
-                            }
-                          },
-                          child: Icon(
-                              canBePicked
-                                  ? Icons.check_sharp
-                                  : Icons.app_blocking_sharp,
-                              color: buttonColor)),
-                    ),
-                  ),
-                )
-              : SizedBox.fromSize(
-                  size: Size(MediaQuery.of(context).size.width * 0.8,
-                      56), // button width and height
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Material(
-                      child: InkWell(
-                          overlayColor: buttonColor,
-                          onTap: () {
-                            if (canBePicked) {
-                              onPlacePicked!(result);
-                            }
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                  canBePicked
-                                      ? Icons.check_sharp
-                                      : Icons.app_blocking_sharp,
-                                  color: buttonColor),
-                              SizedBox.fromSize(size: new Size(10, 0)),
-                              Text(
-                                  canBePicked
-                                      ? selectText!
-                                      : outsideOfPickAreaText!,
-                                  style: TextStyle(color: buttonColor))
-                            ],
-                          )),
-                    ),
-                  ),
-                )
-        ],
-      ),
     );
   }
 

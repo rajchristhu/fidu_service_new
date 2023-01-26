@@ -11,7 +11,7 @@ import 'dart:io' show Platform;
 
 import 'package:uuid/uuid.dart';
 
-import '../../resources/colors.dart';
+import '../../widget/custom_progress_bar.dart';
 import '../providers/place_provider.dart';
 import 'autocomplete_search.dart';
 import 'controllers/autocomplete_search_controller.dart';
@@ -51,7 +51,7 @@ class PlacePicker extends StatefulWidget {
     this.autoCompleteDebounceInMilliseconds = 500,
     this.cameraMoveDebounceInMilliseconds = 750,
     this.initialMapType = MapType.normal,
-    this.enableMapTypeButton = true,
+    this.enableMapTypeButton = false,
     this.enableMyLocationButton = true,
     this.myLocationButtonCooldown = 10,
     this.usePinPointingSearch = true,
@@ -286,8 +286,12 @@ class _PlacePickerState extends State<PlacePicker> {
           future: _futureProvider,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return Container(
+                color: Colors.white,
+                child: FiduProgressDialog.instance.showProgressDialog(context),
+              );
             } else if (snapshot.hasData) {
+              FiduProgressDialog.instance.dismissDialog(context);
               provider = snapshot.data;
 
               return MultiProvider(
@@ -309,99 +313,6 @@ class _PlacePickerState extends State<PlacePicker> {
                       title: _buildSearchBar(context),
                     ),
                     body: _buildMapWithLocation(),
-                    bottomSheet: SizedBox(
-                      height: 300,
-                      width: MediaQuery.of(context).size.width,
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: grayColor,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(20)),
-                              ),
-                              width: 70,
-                              height: 10,
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Complete address : ",
-                                    style: TextStyle(
-                                        color: blackColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Address, Street name, Dict name, India",
-                                    style: TextStyle(
-                                        color: blackColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  lineSeparator(context),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(
-                                    "Landmark / Flat No : ",
-                                    style: TextStyle(
-                                        color: blackColor,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  const SizedBox(
-                                    height: 40,
-                                    child: TextField(
-                                      textAlign: TextAlign.start,
-                                      // controller: controller,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                                        alignLabelWithHint: true,
-                                        label: Center(
-                                          child: Text(
-                                            'Landmark (optional)',
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 30,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  textStyle: const TextStyle(fontSize: 14),
-                                ),
-                                onPressed: () {},
-                                child: const Text('Confirm Location'),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
                   _buildIntroModal(context),
                 ]),
@@ -627,14 +538,5 @@ class _PlacePickerState extends State<PlacePicker> {
             ])
           : Container();
     });
-  }
-
-  Widget lineSeparator(context) {
-    return Container(
-      height: 1.6,
-      width: MediaQuery.of(context).size.width,
-      color: grayColorOne,
-      padding: const EdgeInsets.only(right: 6, left: 6),
-    );
   }
 }
