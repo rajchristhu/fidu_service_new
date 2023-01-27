@@ -1,20 +1,18 @@
 import 'dart:io';
 
-import 'package:fidu_service/core/FirebaseCURD.dart';
-import 'package:fidu_service/features/main_page/map/map.dart';
 import 'package:fidu_service/resources/colors.dart';
 import 'package:fidu_service/resources/strings.dart';
 import 'package:fidu_service/util/connectivity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:fidu_service/features/dashboard/dashboard.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:app_settings/app_settings.dart';
 
+import '../../util/PopUp.dart';
 import '../../util/secure_storage.dart';
 import '../../view/main_page/page/cart_page.dart';
 import '../../view/main_page/page/maps_place_picker_page.dart';
@@ -87,11 +85,21 @@ class _BottomNavBarState extends State<BottomNavBar> {
     super.initState();
     _page = 2;
     _getCurrentLocation();
-
-
   }
 
-  _getCurrentLocation() {
+  _getCurrentLocation() async {
+    if (!await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+      showDataAlert(
+        context,
+        "Turn on location",
+        "Settings",
+        () {
+          AppSettings.openLocationSettings();
+          Navigator.of(context).pop();
+        },
+      );
+    }
+
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
@@ -106,23 +114,28 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   _getAddressFromLatLng() async {
-    try {
-      List<Placemark> p = await geolocator.placemarkFromCoordinates(
-          _currentPosition!.latitude, _currentPosition!.longitude);
+    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+      try {
+        List<Placemark> p = await geolocator.placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude);
 
-      Placemark place = p[0];
-      setState(() {
-        _currentAddress =
-            "${place.name != null ? place.name + " ," : ""}${place.subLocality != null ? place.subLocality + " ," : ""}${place.locality} ${place.postalCode}, ${place.country}";
-      });
-    } catch (e) {
-      print(e);
+        Placemark place = p[0];
+        setState(() {
+          _currentAddress =
+              "${place.name != null ? place.name + " ," : ""}${place.subLocality != null ? place.subLocality + " ," : ""}${place.locality} ${place.postalCode}, ${place.country}";
+        });
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      openAppSettings();
+      // await Permission.locationWhenInUse.request();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    secureStorage.get("UID").then((value) =>  print("UID : "+value));
+    secureStorage.get("UID").then((value) => print("UID : " + value));
     return Scaffold(
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
@@ -412,16 +425,36 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
               InkWell(
                 onTap: () async {
-                  if (Platform.isAndroid &&
-                      await Permission
-                          .locationWhenInUse.serviceStatus.isEnabled) {
-                    print("Permission Granted");
-                    Get.to(MapsPlacePicker());
+                  if (Platform.isAndroid) {
+                    if (await Permission.locationWhenInUse.isGranted) {
+                      Get.to(MapsPlacePicker());
+                    } else {
+                      showDataAlert(
+                        context,
+                        "Grant Permission",
+                        "Fidu Settings",
+                        () {
+                          openAppSettings();
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }
                   } else if (Platform.isIOS) {
-                    print("IOS Plartform");
-                    Get.to(MapsPlacePicker());
-                  } else {
-                    print("Permission denied");
+                    if (await Permission.locationWhenInUse.isGranted) {
+                      Get.to(MapsPlacePicker());
+                    } else {
+                      showDataAlert(
+                        context,
+                        "Grant Permission",
+                        "Fidu Settings",
+                            () {
+                          openAppSettings();
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    }
+                    // openAppSettings();
+                    // Get.to(MapsPlacePicker());
                   }
                 },
                 child: Column(
@@ -494,11 +527,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
         body: _page == 0
             ? Container()
             : _page == 1
-                ? CartPage()
+                ? const CartPage()
                 : _page == 2
                     ? const ShopFidu()
                     : _page == 3
-                        ? OrderPage()
+                        ? const OrderPage()
                         : _page == 4
                             ? Profile()
                             : Container());

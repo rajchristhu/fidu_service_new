@@ -43,8 +43,7 @@ class _ContinueWithPhoneState extends State<ContinueWithPhone> {
             );
           },
           codeAutoRetrievalTimeout: (String verificationId) {},
-        )
-        .then((value) => {print("adfdf")});
+        );
   }
 
   @override

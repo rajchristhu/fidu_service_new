@@ -11,7 +11,10 @@ import '../../widget/fidu_logo.dart';
 import '../../widget/text_widget.dart';
 import 'package:get/get.dart';
 
+import '../Login/login_page.dart';
+import '../dashboard/dashboard.dart';
 import '../onboard_screen/onboard_screen.dart';
+import 'package:fidu_service/util/secure_storage.dart';
 
 class SplashPage extends FiduServiceFullWidget {
   @override
@@ -26,14 +29,22 @@ class _SplashPageState extends FiduService<SplashPage> {
     super.initState();
     _navigate();
     // FiduProgressDialog.instance.showProgressDialog(context);
-
   }
 
   ///Navigate to Login screen
   void _navigate() {
     Future.delayed(Duration(seconds: 5), () {
       if (mounted) {
-        Get.offAll(OnboardingScreen());
+        secureStorage.get("isFirst").then((value) => {
+              if (value != "1")
+                {Get.offAll(OnboardingScreen())}
+              else
+                {
+                  secureStorage.get("UID").then((value) => Get.offAll(
+                      value == "" ? ContinueWithPhone() : BottomNavBar()))
+                }
+            });
+
         // Navigator.pushReplacementNamed(context, RoutePaths.Login);
       }
     });
@@ -45,14 +56,13 @@ class _SplashPageState extends FiduService<SplashPage> {
       // color: accentColor,
       decoration: BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              accentColor,
-              secondaryColor,
-            ],
-          )
-      ),
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [
+          accentColor,
+          secondaryColor,
+        ],
+      )),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -86,42 +96,36 @@ class _SplashPageState extends FiduService<SplashPage> {
   }
 
   Widget _buildTagLine() {
-    return
-    Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 0,
-        vertical: 0,
-      ),
-      child: FadeIn(
-    child:SizedBox(
-        child: DefaultTextStyle(
-          style:  textStyle(
-            fontSize: 42.0,
-            fontWeight: FontWeight.w600
-          ),  child:AnimatedTextKit(
-      animatedTexts: [
-        TypewriterAnimatedText('Fidu Service',speed: const Duration(milliseconds: 250) ),
-        // TypewriterAnimatedText('Design first, then code'),
-      ],
-      onTap: () {
-        print("Tap Event");
-      },
-    )
-    )    // textLabel(
-    //       text: "FIDU SERVICE",
-    //       fontSize: 32,
-    //       centerText: true,
-    //       maxLines: 1,
-    //       color: Colors.white,
-    //       fontWeight: FontWeight.w700,
-    //       letterSpacing: 0.2)
+    return Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 0,
+          vertical: 0,
+        ),
+        child: FadeIn(
+            child: SizedBox(
+          child: DefaultTextStyle(
+              style: textStyle(fontSize: 42.0, fontWeight: FontWeight.w600),
+              child: AnimatedTextKit(
+                animatedTexts: [
+                  TypewriterAnimatedText('Fidu Service',
+                      speed: const Duration(milliseconds: 250)),
+                  // TypewriterAnimatedText('Design first, then code'),
+                ],
+                onTap: () {
+                  print("Tap Event");
+                },
+              )) // textLabel(
+          //       text: "FIDU SERVICE",
+          //       fontSize: 32,
+          //       centerText: true,
+          //       maxLines: 1,
+          //       color: Colors.white,
+          //       fontWeight: FontWeight.w700,
+          //       letterSpacing: 0.2)
 
-        ,)
-    ));
+          ,
+        )));
   }
-
-
-
 
   ///build app logo at the center
   Widget _buildLogo() {

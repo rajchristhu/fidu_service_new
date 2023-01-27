@@ -23,9 +23,23 @@ class _SecureStorage {
   List<_Item> items = [];
 
   Future<String> get(String key) async {
-    _Item item =
-        items.where((element) => element.key == key.toLowerCase()).first;
-    return item == null ? "" : item.value;
+    _Item? item;
+    try {
+      item = items.where((element) => element.key == key.toLowerCase()).first;
+    } catch (e) {
+      print("Not Found Exception: $e");
+    }
+    getAll();
+    return item?.value ?? "";
+  }
+
+  Future<void> delete(String key) async {
+    await storage.delete(
+      key: key.toLowerCase(),
+      iOptions: _getIOSOptions(),
+      aOptions: _getAndroidOptions(),
+    );
+    getAll();
   }
 
   Future<void> getAll() async {

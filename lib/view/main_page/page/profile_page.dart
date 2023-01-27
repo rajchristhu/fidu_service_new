@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:fidu_service/util/secure_storage.dart';
+
+import '../../../features/Login/login_page.dart';
+import 'package:get/get.dart';
 
 class Profile extends StatefulWidget {
   Profile({Key? key}) : super(key: key);
@@ -157,26 +161,34 @@ class _ProfileState extends State<Profile> {
                             const SizedBox(
                               height: 10,
                             ),
-                            Row(
-                              children: const [
-                                Icon(
-                                  Icons.logout,
-                                  color: Colors.grey,
-                                  size: 28.0,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  "Logout",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w500,
-                                      color: Colors.black),
-                                )
-                              ],
-                            ),
+                            InkWell(
+                              onTap: (){
+                                secureStorage.add(
+                                    "uid", "");
+                                Get.offAll(ContinueWithPhone());
+                              },
+                              child: Row(
+                                children: const [
+                                  Icon(
+                                    Icons.logout,
+                                    color: Colors.grey,
+                                    size: 28.0,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Logout",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black),
+                                  )
+                                ],
+                              ),
+                            )
+                            ,
                             const SizedBox(
                               height: 6,
                             ),

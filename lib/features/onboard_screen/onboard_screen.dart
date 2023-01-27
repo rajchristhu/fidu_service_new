@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:fidu_service/util/secure_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fidu_service/widget/text_widget.dart';
@@ -21,9 +22,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
 
-
   @override
   Widget build(BuildContext context) {
+    secureStorage.add(
+        "isFirst", "1");
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: secondaryColor,
@@ -64,15 +66,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           children: [
                             Text(
                               tab.title,
-                              style:  textStyle(
-                                fontSize: 27.0,color: Colors.white,
+                              style: textStyle(
+                                fontSize: 27.0,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 50),
                             Text(
                               tab.subtitle,
-                              style:  textStyle(
+                              style: textStyle(
                                 fontSize: 17.0,
                                 color: Colors.white,
                               ),
@@ -103,41 +106,44 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
       floatingActionButton: Stack(
         children: <Widget>[
-          _currentIndex != 0?   Padding(padding: EdgeInsets.only(left: 32),child:  Align(
-            alignment: Alignment.bottomLeft,
-            child: FloatingActionButton(
-              heroTag: null,
+          _currentIndex != 0
+              ? Padding(
+                  padding: EdgeInsets.only(left: 32),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: FloatingActionButton(
+                      heroTag: null,
+                      onPressed: () {
+                        if (_currentIndex == 2) {
+                          _pageController.animateToPage(
+                            0,
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.linear,
+                          );
+                          // Get.to(OnboardingScreen());
 
-              onPressed: () {
-                if (_currentIndex == 2) {
-                  _pageController.animateToPage(
-                    0,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.linear,
-                  );
-                  // Get.to(OnboardingScreen());
-
-                } else {
-                  _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.linear,
-                  );
-                }
-              },
-              child: const Icon(CupertinoIcons.left_chevron, color: Colors.black),
-              backgroundColor: Colors.white,
-            ),
-          ),)
-         :Container(),
+                        } else {
+                          _pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.linear,
+                          );
+                        }
+                      },
+                      child: const Icon(CupertinoIcons.left_chevron,
+                          color: Colors.black),
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
+                )
+              : Container(),
           Align(
             alignment: Alignment.bottomRight,
             child: FloatingActionButton(
               heroTag: null,
-
               onPressed: () {
                 if (_currentIndex == 2) {
-                  Get.offAll(ContinueWithPhone());
-
+                  // secureStorage.delete("UID");
+                  Get.offAll(BottomNavBar());
                 } else {
                   _pageController.nextPage(
                     duration: const Duration(milliseconds: 300),
@@ -145,7 +151,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   );
                 }
               },
-              child:  Icon(_currentIndex == 2?CupertinoIcons.check_mark:CupertinoIcons.chevron_right, color: Colors.black,),
+              child: Icon(
+                _currentIndex == 2
+                    ? CupertinoIcons.check_mark
+                    : CupertinoIcons.chevron_right,
+                color: Colors.black,
+              ),
               backgroundColor: Colors.white,
             ),
           ),
