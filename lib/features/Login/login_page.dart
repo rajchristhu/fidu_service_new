@@ -1,7 +1,6 @@
 import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../util/secure_storage.dart';
 import 'numeric_pad.dart';
 import 'verify_phone.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -34,7 +33,6 @@ class _ContinueWithPhoneState extends State<ContinueWithPhone> {
             }
           },
           codeSent: (String verificationId, int? resendToken) async {
-
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -168,9 +166,6 @@ class _ContinueWithPhoneState extends State<ContinueWithPhone> {
                       child: GestureDetector(
                         onTap: () {
                           login();
-                          // SecureStorage.instance
-                          //     .read("UID")
-                          //     .then((value) => print("UID ${value}"));
                         },
                         child: Container(
                           height: 50,

@@ -139,7 +139,6 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-
                         // // Create a PhoneAuthCredential with the code
                         PhoneAuthCredential credential =
                             PhoneAuthProvider.credential(
@@ -149,12 +148,11 @@ class _VerifyPhoneState extends State<VerifyPhone> {
                         await FirebaseAuth.instance
                             .signInWithCredential(credential)
                             .then((value) => {
-                        print("value.user!.displayName!"),
-                        // print(value.user!.displayName!),
-                        print(value.user?.uid),
-                        SecureStorage.instance
-                            .addNewItem("uid", value.user?.uid ?? ""),
-                        });
+                                  print("value.user!.displayName!"),
+                                  print(value.user?.uid),
+                                  secureStorage.add(
+                                      "uid", value.user?.uid ?? ""),
+                                });
                         Get.offAll(BottomNavBar());
                       },
                       child: Container(

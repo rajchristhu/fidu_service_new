@@ -17,7 +17,7 @@ void main() async {
   ConnectionStatusSingleton connectionStatus =
       ConnectionStatusSingleton.getInstance();
   connectionStatus.initialize();
-  SecureStorage.instance.init();
+  secureStorage.init();
   runApp(const MyApp());
 }
 

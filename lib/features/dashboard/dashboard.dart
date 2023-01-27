@@ -122,7 +122,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    SecureStorage.instance.read("uid").then((value) =>  print("UID : "+value));
+    secureStorage.get("UID").then((value) =>  print("UID : "+value));
     return Scaffold(
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,

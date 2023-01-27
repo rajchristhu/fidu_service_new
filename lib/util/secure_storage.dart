@@ -8,23 +8,27 @@ class _Item {
   final String value;
 }
 
-class SecureStorage {
-  SecureStorage._();
+// ignore: library_private_types_in_public_api
+_SecureStorage secureStorage = _SecureStorage.instance;
 
-  static final SecureStorage instance = SecureStorage._();
+class _SecureStorage {
+  _SecureStorage._();
+
+  static final _SecureStorage instance = _SecureStorage._();
 
   final _accountNameController =
       TextEditingController(text: 'flutter_secure_storage_service');
 
   late final FlutterSecureStorage storage;
-  // ignore: library_private_types_in_public_api
   List<_Item> items = [];
 
-  Future<String> read(String key) async {
-    return items.where((element) => element.key == key).elementAt(0).value;
+  Future<String> get(String key) async {
+    _Item item =
+        items.where((element) => element.key == key.toLowerCase()).first;
+    return item == null ? "" : item.value;
   }
 
-  Future<void> readAll() async {
+  Future<void> getAll() async {
     final all = await storage.readAll(
       iOptions: _getIOSOptions(),
       aOptions: _getAndroidOptions(),
@@ -39,23 +43,23 @@ class SecureStorage {
       iOptions: _getIOSOptions(),
       aOptions: _getAndroidOptions(),
     );
-    readAll();
+    getAll();
   }
 
-  Future<void> addNewItem(String key, String value) async {
+  Future<void> add(String key, String value) async {
     await storage.write(
       key: key,
       value: value,
       iOptions: _getIOSOptions(),
       aOptions: _getAndroidOptions(),
     );
-    readAll();
+    getAll();
   }
 
   Future<void> init() async {
     storage = const FlutterSecureStorage();
-    _accountNameController.addListener(() => readAll());
-    readAll();
+    _accountNameController.addListener(() => getAll());
+    getAll();
   }
 
   IOSOptions _getIOSOptions() => IOSOptions(accountName: _getAccountName());
