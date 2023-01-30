@@ -36,12 +36,13 @@ class _SplashPageState extends FiduService<SplashPage> {
     Future.delayed(Duration(seconds: 5), () {
       if (mounted) {
         secureStorage.get("isFirst").then((value) => {
+              secureStorage.add("isFirst", "1"),
               if (value != "1")
                 {Get.offAll(OnboardingScreen())}
               else
                 {
                   secureStorage.get("UID").then((value) => Get.offAll(
-                      value == "" ? ContinueWithPhone() : BottomNavBar()))
+                      value == "" ? BottomNavBar() : BottomNavBar()))
                 }
             });
 
