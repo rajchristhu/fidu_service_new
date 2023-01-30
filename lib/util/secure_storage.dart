@@ -25,7 +25,7 @@ class _SecureStorage {
   Future<String> get(String key) async {
     _Item? item;
     try {
-      item = items.where((element) => element.key == key.toLowerCase()).first;
+      item = items.where((element) => element.key.toLowerCase() == key.toLowerCase()).first;
     } catch (e) {
       print("Not Found Exception: $e");
     }
