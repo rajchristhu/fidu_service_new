@@ -1,18 +1,20 @@
 import 'dart:io';
 
+import 'package:fidu_service/core/FirebaseCURD.dart';
+import 'package:fidu_service/features/main_page/map/map.dart';
 import 'package:fidu_service/resources/colors.dart';
 import 'package:fidu_service/resources/strings.dart';
 import 'package:fidu_service/util/connectivity_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:fidu_service/features/dashboard/dashboard.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:app_settings/app_settings.dart';
 
-import '../../util/PopUp.dart';
 import '../../util/secure_storage.dart';
 import '../../view/main_page/page/cart_page.dart';
 import '../../view/main_page/page/maps_place_picker_page.dart';
@@ -26,7 +28,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   ConnectionStatusSingleton connectionStatus =
-      ConnectionStatusSingleton.getInstance();
+  ConnectionStatusSingleton.getInstance();
   connectionStatus.initialize();
   runApp(const Dahboard());
 }
@@ -43,19 +45,19 @@ class Dahboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return KeyboardDismissOnTap(
         child: GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: Strings.appName,
-      theme: ThemeData(
-        // fontFamily: 'AvenirNext',
-        backgroundColor: backgroundColor,
-        primarySwatch: Colors.amber,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        textTheme: GoogleFonts.varelaRoundTextTheme(
-          Theme.of(context).textTheme,
-        ),
-      ),
-      home: BottomNavBar(),
-    ));
+          debugShowCheckedModeBanner: false,
+          title: Strings.appName,
+          theme: ThemeData(
+            // fontFamily: 'AvenirNext',
+            backgroundColor: backgroundColor,
+            primarySwatch: Colors.amber,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+            textTheme: GoogleFonts.varelaRoundTextTheme(
+              Theme.of(context).textTheme,
+            ),
+          ),
+          home: BottomNavBar(),
+        ));
   }
 }
 
@@ -85,21 +87,11 @@ class _BottomNavBarState extends State<BottomNavBar> {
     super.initState();
     _page = 2;
     _getCurrentLocation();
+
+
   }
 
-  _getCurrentLocation() async {
-    if (!await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      showDataAlert(
-        context,
-        "Turn on location",
-        "Settings",
-        () {
-          AppSettings.openLocationSettings();
-          Navigator.of(context).pop();
-        },
-      );
-    }
-
+  _getCurrentLocation() {
     geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
@@ -114,28 +106,23 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   _getAddressFromLatLng() async {
-    if (await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      try {
-        List<Placemark> p = await geolocator.placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude);
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          _currentPosition!.latitude, _currentPosition!.longitude);
 
-        Placemark place = p[0];
-        setState(() {
-          _currentAddress =
-              "${place.name != null ? place.name + " ," : ""}${place.subLocality != null ? place.subLocality + " ," : ""}${place.locality} ${place.postalCode}, ${place.country}";
-        });
-      } catch (e) {
-        print(e);
-      }
-    } else {
-      openAppSettings();
-      // await Permission.locationWhenInUse.request();
+      Placemark place = p[0];
+      setState(() {
+        _currentAddress =
+        "${place.name != null ? place.name + " ," : ""}${place.subLocality != null ? place.subLocality + " ," : ""}${place.locality} ${place.postalCode}, ${place.country}";
+      });
+    } catch (e) {
+      print(e);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    secureStorage.get("UID").then((value) => print("UID : " + value));
+    secureStorage.get("UID").then((value) =>  print("UID : "+value));
     return Scaffold(
         resizeToAvoidBottomInset: false,
         key: _scaffoldKey,
@@ -144,195 +131,195 @@ class _BottomNavBarState extends State<BottomNavBar> {
               0.70, // 75% of screen will be occupied
           child: Drawer(
               child: Stack(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  color: whiteColors,
-                ),
-                child: ListView(
-                  children: <Widget>[
-                    SafeArea(
-                      child: ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(20.0),
-                            bottomRight: Radius.circular(20.0)),
-                        // const BorderRadius.all( Radius.circular(18.0)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.transparent),
-                            borderRadius: BorderRadius.circular(2),
-                          ),
-                          padding:
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      color: whiteColors,
+                    ),
+                    child: ListView(
+                      children: <Widget>[
+                        SafeArea(
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20.0),
+                                bottomRight: Radius.circular(20.0)),
+                            // const BorderRadius.all( Radius.circular(18.0)),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.transparent),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              padding:
                               EdgeInsets.only(bottom: 20, left: 10, top: 20),
-                          child: Row(
-                            //mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              const Expanded(
-                                flex: 0,
-                                child: CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage: NetworkImage(
-                                        'https://picsum.photos/100')),
-                              ),
-                              SizedBox(
-                                width: 15,
-                              ),
-                              Expanded(
-                                  flex: 2,
-                                  child: Column(
-                                    crossAxisAlignment:
+                              child: Row(
+                                //mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Expanded(
+                                    flex: 0,
+                                    child: CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: NetworkImage(
+                                            'https://picsum.photos/100')),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Expanded(
+                                      flex: 2,
+                                      child: Column(
+                                        crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Hello!",
-                                        style: TextStyle(
-                                            color: blackColor,
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 15),
-                                      ),
-                                      SizedBox(
-                                        height: 6,
-                                      ),
-                                      Text(
-                                        "Maria Christhu Rajan fjhbfbhbhwebfhjewbfhb",
-                                        style: TextStyle(
-                                            color: blackColor,
-                                            overflow: TextOverflow.ellipsis,
-                                            fontWeight: FontWeight.w600),
-                                      )
-                                    ],
-                                  )),
-                            ],
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Hello!",
+                                            style: TextStyle(
+                                                color: blackColor,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 15),
+                                          ),
+                                          SizedBox(
+                                            height: 6,
+                                          ),
+                                          Text(
+                                            "Maria Christhu Rajan fjhbfbhbhwebfhjewbfhb",
+                                            style: TextStyle(
+                                                color: blackColor,
+                                                overflow: TextOverflow.ellipsis,
+                                                fontWeight: FontWeight.w600),
+                                          )
+                                        ],
+                                      )),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    ListTile(
-                      onTap: () {
-                        // getLocation();
-                      },
-                      leading: Icon(
-                        Icons.history_rounded,
-                        size: 22,
-                        color: primaryColor,
-                      ),
-                      // trailing: const Text(
-                      //     "99+"
-                      // ),
-                      title: Transform(
-                        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                        child: Text(
-                          "Order History",
-                          style: TextStyle(
-                              color: blackColor, fontWeight: FontWeight.w600),
+                        ListTile(
+                          onTap: () {
+                            // getLocation();
+                          },
+                          leading: Icon(
+                            Icons.history_rounded,
+                            size: 22,
+                            color: primaryColor,
+                          ),
+                          // trailing: const Text(
+                          //     "99+"
+                          // ),
+                          title: Transform(
+                            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                            child: Text(
+                              "Order History",
+                              style: TextStyle(
+                                  color: blackColor, fontWeight: FontWeight.w600),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    MySeparator(
-                      color: grayColor,
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      leading: Icon(
-                        Icons.support_agent,
-                        size: 22,
-                        color: primaryColor,
-                      ),
-                      title: Transform(
-                        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                        child: Text(
-                          "Support",
-                          style: TextStyle(
-                              color: blackColor, fontWeight: FontWeight.w600),
+                        MySeparator(
+                          color: grayColor,
                         ),
-                      ),
-                    ),
-                    MySeparator(
-                      color: grayColor,
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      leading: Icon(
-                        Icons.help_outline_rounded,
-                        size: 22,
-                        color: primaryColor,
-                      ),
-                      title: Transform(
-                        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                        child: Text(
-                          "Help",
-                          style: TextStyle(
-                              color: blackColor, fontWeight: FontWeight.w600),
+                        ListTile(
+                          onTap: () {},
+                          leading: Icon(
+                            Icons.support_agent,
+                            size: 22,
+                            color: primaryColor,
+                          ),
+                          title: Transform(
+                            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                            child: Text(
+                              "Support",
+                              style: TextStyle(
+                                  color: blackColor, fontWeight: FontWeight.w600),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    MySeparator(
-                      color: grayColor,
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      leading: Icon(
-                        Icons.note_outlined,
-                        size: 22,
-                        color: primaryColor,
-                      ),
-                      title: Transform(
-                        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                        child: Text(
-                          "Terms and Condition",
-                          style: TextStyle(
-                              color: blackColor, fontWeight: FontWeight.w600),
+                        MySeparator(
+                          color: grayColor,
                         ),
-                      ),
-                    ),
-                    MySeparator(
-                      color: grayColor,
-                    ),
-                    ListTile(
-                      onTap: () {},
-                      leading: Icon(
-                        Icons.star_border_rounded,
-                        size: 22,
-                        color: primaryColor,
-                      ),
-                      title: Transform(
-                        transform: Matrix4.translationValues(-16, 0.0, 0.0),
-                        child: Text(
-                          "Rate the Application",
-                          style: TextStyle(
-                              color: blackColor, fontWeight: FontWeight.w600),
+                        ListTile(
+                          onTap: () {},
+                          leading: Icon(
+                            Icons.help_outline_rounded,
+                            size: 22,
+                            color: primaryColor,
+                          ),
+                          title: Transform(
+                            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                            child: Text(
+                              "Help",
+                              style: TextStyle(
+                                  color: blackColor, fontWeight: FontWeight.w600),
+                            ),
+                          ),
                         ),
-                      ),
+                        MySeparator(
+                          color: grayColor,
+                        ),
+                        ListTile(
+                          onTap: () {},
+                          leading: Icon(
+                            Icons.note_outlined,
+                            size: 22,
+                            color: primaryColor,
+                          ),
+                          title: Transform(
+                            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                            child: Text(
+                              "Terms and Condition",
+                              style: TextStyle(
+                                  color: blackColor, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                        MySeparator(
+                          color: grayColor,
+                        ),
+                        ListTile(
+                          onTap: () {},
+                          leading: Icon(
+                            Icons.star_border_rounded,
+                            size: 22,
+                            color: primaryColor,
+                          ),
+                          title: Transform(
+                            transform: Matrix4.translationValues(-16, 0.0, 0.0),
+                            child: Text(
+                              "Rate the Application",
+                              style: TextStyle(
+                                  color: blackColor, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              ClipPath(
-                clipper: FooterWaveClipper(),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: orangeGradients,
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.center),
                   ),
-                  height: MediaQuery.of(context).size.height,
-                ),
-              ),
-              Positioned(
-                  bottom: 30,
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.80,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Container(),
+                  ClipPath(
+                    clipper: FooterWaveClipper(),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: orangeGradients,
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.center),
+                      ),
+                      height: MediaQuery.of(context).size.height,
                     ),
-                  )),
-            ],
-          )),
+                  ),
+                  Positioned(
+                      bottom: 30,
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Container(),
+                        ),
+                      )),
+                ],
+              )),
         ),
         appBar: AppBar(
           toolbarHeight: 60,
@@ -359,7 +346,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       highlightColor: Colors.transparent,
                       focusColor: Colors.transparent,
                       icon:
-                          Icon(Icons.notifications, size: 18, color: dark_blue),
+                      Icon(Icons.notifications, size: 18, color: dark_blue),
                       onPressed: () {
                         // _scaffoldKey.currentState!.openEndDrawer();
                       }), //CircleAvatar
@@ -394,7 +381,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
                       highlightColor: Colors.transparent,
                       focusColor: Colors.transparent,
                       icon:
-                          Icon(Icons.menu_rounded, size: 18, color: dark_blue),
+                      Icon(Icons.menu_rounded, size: 18, color: dark_blue),
                       onPressed: () {
                         _scaffoldKey.currentState!.openEndDrawer();
                       }), //CircleAvatar
@@ -425,36 +412,16 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
               InkWell(
                 onTap: () async {
-                  if (Platform.isAndroid) {
-                    if (await Permission.locationWhenInUse.isGranted) {
-                      Get.to(MapsPlacePicker());
-                    } else {
-                      showDataAlert(
-                        context,
-                        "Grant Permission",
-                        "Fidu Settings",
-                        () {
-                          openAppSettings();
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    }
+                  if (Platform.isAndroid &&
+                      await Permission
+                          .locationWhenInUse.serviceStatus.isEnabled) {
+                    print("Permission Granted");
+                    Get.to(MapsPlacePicker());
                   } else if (Platform.isIOS) {
-                    if (await Permission.locationWhenInUse.isGranted) {
-                      Get.to(MapsPlacePicker());
-                    } else {
-                      showDataAlert(
-                        context,
-                        "Grant Permission",
-                        "Fidu Settings",
-                            () {
-                          openAppSettings();
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    }
-                    // openAppSettings();
-                    // Get.to(MapsPlacePicker());
+                    print("IOS Plartform");
+                    Get.to(MapsPlacePicker());
+                  } else {
+                    print("Permission denied");
                   }
                 },
                 child: Column(
@@ -527,13 +494,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
         body: _page == 0
             ? Container()
             : _page == 1
-                ? const CartPage()
-                : _page == 2
-                    ? const ShopFidu()
-                    : _page == 3
-                        ? const OrderPage()
-                        : _page == 4
-                            ? Profile()
-                            : Container());
+            ? CartPage()
+            : _page == 2
+            ? const ShopFidu()
+            : _page == 3
+            ? OrderPage()
+            : _page == 4
+            ? Profile()
+            : Container());
   }
 }

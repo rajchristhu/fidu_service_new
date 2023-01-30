@@ -17,15 +17,15 @@ class ProductDetailViewModel extends GetxController {
   final List<ProductDetailModel> _productDetailModel = [];
 
   ProductDetailViewModel() {
-    getProductDetail();
+    // getProductDetail();
   }
 
 
   getProductDetail() async {
     _loading.value = true;
-
+print("object");
     HomeService().getProductDetail(id).then((value) {
-
+print(value);
       if (value.isEmpty) {
         _loading.value = false;
       }
