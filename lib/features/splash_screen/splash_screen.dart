@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:fidu_service/features/onboard_screen/k.dart';
 import 'package:fidu_service/widget/base_app_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class _SplashPageState extends FiduService<SplashPage> {
               else
                 {
                   secureStorage.get("UID").then((value) => Get.offAll(
-                      value == "" ? BottomNavBar() : BottomNavBar()))
+                      value == "" ? ContinueWithPhone() : BottomNavBar()))
                 }
             });
 

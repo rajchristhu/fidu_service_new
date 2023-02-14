@@ -14,24 +14,25 @@ class ProductDetailViewModel extends GetxController {
   String? id;
 
   List<ProductDetailModel> get productDetailModel => _productDetailModel;
+
+  Set<String> get productCategories => _productCategories;
   final List<ProductDetailModel> _productDetailModel = [];
+  final Set<String> _productCategories = {};
 
   ProductDetailViewModel() {
     // getProductDetail();
   }
 
-
   getProductDetail() async {
     _loading.value = true;
-print("object");
     HomeService().getProductDetail(id).then((value) {
-print(value);
       if (value.isEmpty) {
         _loading.value = false;
       }
       _productDetailModel.clear();
       for (int i = 0; i < value.length; i++) {
         _productDetailModel.add(value[i]);
+        _productCategories.add(value[i].description ?? "");
         _loading.value = false;
       }
       update();

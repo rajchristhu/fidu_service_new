@@ -46,6 +46,6 @@ class _ShopInfoState extends State<ShopInfo> {
         builder: (controller) => controller.loading.value
             ? Container(
           color:Colors.white,child: FiduProgressDialog.instance.showProgressDialog(context),)
-            : ShopWidget(controller,_cartProducts,widget.storeName));
+            : ShopScreen(controller,_cartProducts,widget.storeName));
   }
 }
