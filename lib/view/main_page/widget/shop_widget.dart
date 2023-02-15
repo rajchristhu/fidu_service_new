@@ -2,7 +2,6 @@ import 'package:fidu_service/core/view_model/product_detail_vm.dart';
 import 'package:fidu_service/model/cart_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../../../core/view_model/cart_viewmodel.dart';
 import '../../../core/view_model/control_view_model.dart';
@@ -31,7 +30,6 @@ class ShopScreen extends StatefulWidget {
 
 class ShopScreenState extends State<ShopScreen> {
   late ScrollController _controller;
-  final indexScrollController = ItemScrollController();
   Map<String, int> _category = <String, int>{};
 
   bool isVegSelected = false;
@@ -133,7 +131,7 @@ class ShopScreenState extends State<ShopScreen> {
                                       style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(7),
+                                                  BorderRadius.circular(7),
                                               side: BorderSide(
                                                   width: 0.5,
                                                   color: isVegSelected
@@ -145,8 +143,7 @@ class ShopScreenState extends State<ShopScreen> {
                                           padding: EdgeInsets.all(8)),
                                       child: Row(
                                         children: [
-                                          Image.asset(
-                                              'assets/pages/veg.png'),
+                                          Image.asset('assets/pages/veg.png'),
                                           const SizedBox(width: 8),
                                           Text(
                                             "Veg",
@@ -165,15 +162,14 @@ class ShopScreenState extends State<ShopScreen> {
                                     child: ElevatedButton(
                                       onPressed: () {
                                         setState(() {
-                                          isNonVegSelected =
-                                          !isNonVegSelected;
+                                          isNonVegSelected = !isNonVegSelected;
                                           setState(() {});
                                         });
                                       },
                                       style: ElevatedButton.styleFrom(
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
-                                              BorderRadius.circular(7),
+                                                  BorderRadius.circular(7),
                                               side: BorderSide(
                                                   width: 0.5,
                                                   color: isNonVegSelected
