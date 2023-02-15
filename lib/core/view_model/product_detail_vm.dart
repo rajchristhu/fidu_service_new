@@ -30,6 +30,7 @@ class ProductDetailViewModel extends GetxController {
         _loading.value = false;
       }
       _productDetailModel.clear();
+      _productCategories.clear();
       for (int i = 0; i < value.length; i++) {
         _productDetailModel.add(value[i]);
         _productCategories.add(value[i].description ?? "");

@@ -24,6 +24,7 @@ class FoodInRestaurant extends StatefulWidget {
 class _FoodInRestaurantState extends State<FoodInRestaurant> {
   @override
   void initState() {
+    widget._cartProducts =  Get.find<CartViewModel>().cartProducts;
     super.initState();
   }
 

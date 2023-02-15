@@ -1,5 +1,4 @@
 import 'package:fidu_service/core/service/local_database_cart.dart';
-import 'package:fidu_service/features/main_page/pages/static_filters_on_restaurant.dart';
 import 'package:fidu_service/features/main_page/widget/restaurant_app_bar.dart';
 import 'package:fidu_service/features/main_page/widget/restaurant_food_card.dart';
 import 'package:fidu_service/resources/colors.dart';
@@ -45,7 +44,9 @@ class _ShopInfoState extends State<ShopInfo> {
         init: Get.find<ProductDetailViewModel>(),
         builder: (controller) => controller.loading.value
             ? Container(
-          color:Colors.white,child: FiduProgressDialog.instance.showProgressDialog(context),)
-            : ShopScreen(controller,_cartProducts,widget.storeName));
+                color: Colors.white,
+                child: FiduProgressDialog.instance.showProgressDialog(context),
+              )
+            : ShopScreen(controller, _cartProducts, widget.storeName));
   }
 }
