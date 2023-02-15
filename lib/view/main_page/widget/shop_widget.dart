@@ -14,6 +14,7 @@ import '../../../widget/custom_progress_bar.dart';
 import '../../control_view.dart';
 import '../../widgets/custom_text.dart';
 import '../../widgets/filter.button/round_animated_button.dart';
+import '../../widgets/filter.button/veg_or_non_slider.dart';
 
 class ShopScreen extends StatefulWidget {
   ShopScreen(this.controller, this.cartProducts, this.storeName, {super.key});
@@ -114,91 +115,7 @@ class ShopScreenState extends State<ShopScreen> {
                                 AnimatedButton(index: 0),
                               ],
                             ),
-                            SizedBox(
-                              height: 35,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const SizedBox(width: 15),
-                                  SizedBox(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          isVegSelected = !isVegSelected;
-                                          setState(() {});
-                                        });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                              side: BorderSide(
-                                                  width: 0.5,
-                                                  color: isVegSelected
-                                                      ? primaryColorDarkOne
-                                                      : whiteColor)),
-                                          backgroundColor: isVegSelected
-                                              ? chipSelectedColor
-                                              : whiteColor,
-                                          padding: EdgeInsets.all(8)),
-                                      child: Row(
-                                        children: [
-                                          Image.asset('assets/pages/veg.png'),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            "Veg",
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: textColor,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 15),
-                                  SizedBox(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          isNonVegSelected = !isNonVegSelected;
-                                          setState(() {});
-                                        });
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
-                                              side: BorderSide(
-                                                  width: 0.5,
-                                                  color: isNonVegSelected
-                                                      ? primaryColorDarkOne
-                                                      : whiteColor)),
-                                          backgroundColor: isNonVegSelected
-                                              ? chipSelectedColor
-                                              : whiteColor,
-                                          padding: EdgeInsets.all(8)),
-                                      child: Row(
-                                        children: [
-                                          Image.asset(
-                                              'assets/pages/non-veg.png'),
-                                          const SizedBox(width: 8),
-                                          Text(
-                                            "Non-veg",
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              color: textColor,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                            VegOrNonVegSlider(index: 0),
                             SizedBox(
                               child: MediaQuery.removePadding(
                                 context: context,

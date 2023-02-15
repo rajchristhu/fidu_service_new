@@ -1,4 +1,3 @@
-import 'package:fidu_service/resources/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +47,9 @@ class AnimatedButtonState extends State<AnimatedButton> {
   Widget buildSegment(String text, int index) {
     return Text(
       text,
-      style: TextStyle(fontSize: 16, color: groupValue == index ? Colors.white : Colors.black),
+      style: TextStyle(
+          fontSize: 16,
+          color: groupValue == index ? Colors.white : Colors.black),
     );
   }
 }
